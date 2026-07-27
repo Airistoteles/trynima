@@ -39,7 +39,7 @@
      margins, no card — the ink is the design). */
   .board{
     position:relative; z-index:2;
-    max-width:660px; padding:56px 30px 8px;
+    max-width:660px; padding:64px 30px 8px; margin-left:max(4vw, 10px);
   }
   .board h1{
     font-weight:500; font-size:13px; line-height:16px;
@@ -56,7 +56,7 @@
   /* The early-access line: input as ink on the board, teal filled button. */
   form.try{display:flex; gap:10px; margin:2px 0 26px; flex-wrap:wrap; max-width:520px}
   form.try input[type=email], form.try input[type=text]{
-    flex:1; min-width:210px; padding:12px 2px; font:inherit; font-size:19px;
+    flex:1 1 210px; min-width:210px; max-width:300px; padding:12px 2px; font:inherit; font-size:19px;
     color:var(--ink); background:transparent; border:none;
     border-bottom:2px solid var(--hairline); border-radius:0; outline:none;
   }
@@ -103,7 +103,7 @@
 
   .board-wrap{display:flex; flex-direction:column}
   .spacer{flex:1}
-  .small-board{padding:14px 30px 26px}
+  .small-board{padding:14px 30px 26px; margin-left:max(4vw, 10px)}
   /* Small screens: Richard gets his own bottom strip below the text — the
      board never runs over his face. He stays bottom-pinned inside it. */
   @media (max-width: 700px){
