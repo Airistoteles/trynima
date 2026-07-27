@@ -5,48 +5,38 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Nima</title>
 <meta name="robots" content="noindex" />
-<meta name="theme-color" content="#F5F2EA" />
+<meta name="theme-color" content="#FFFFFF" />
 <link rel="icon" type="image/png" href="favicon.png" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet" />
 <style>
-  /* YC-video page. Richard chilling beside his (decorative) whiteboard.
-     One press (any key / tap / 8BitDo button): the noticing beat, then he
-     SPEAKS the line in his real ElevenLabs voice while the mouth follows
-     the audio's loudness envelope — the app's actual mechanism. Press
-     again = replay. No text on the board; the voice carries it. */
+  /* YC-video page v3. Richard chilling, a purely decorative whiteboard
+     sketch (no panel, no text — the ink sits straight on the white, the
+     app's whiteboard law), and EVERYTHING timer-free:
+     the Output Wall's webview suspends JS timers (measured 2026-07-27:
+     breathing CSS ran while a blink chain sat frozen mid-blink), so ALL
+     motion here is CSS keyframes. The answer beat is driven from outside:
+     `cmux browser <surface> eval "window.__perform()"` + afplay on the Mac
+     (browser audio needs a gesture; afplay needs nothing). Click/keypress
+     still work when the page runs focused in a normal browser. */
   :root{
-    --ink:#211E18; --muted:#6C6456; --hairline:#E7E1D4;
-    --teal:#0E7C67; --amber:#DE7F35;
+    --ink:#211E18; --muted:#6C6456; --teal:#0E7C67; --amber:#DE7F35;
   }
   *{box-sizing:border-box; margin:0}
   html,body{height:100%}
   body{
-    background:#F5F2EA; color:var(--ink);
-    font-family:"Ubuntu",system-ui,sans-serif;
+    background:#FFFFFF; color:var(--ink);
+    font-family:system-ui,sans-serif;
     -webkit-font-smoothing:antialiased;
     overflow:hidden; cursor:none;
   }
   .stage{position:relative; height:100svh}
 
-  /* THE WHITEBOARD — a beautiful prop: Richard's actual board world
-     (the line y = 2x + 3 with its climb step), drawn in marker strokes. */
-  .board{
+  /* The decorative board sketch — ink straight on the white. */
+  .sketch{
     position:absolute; z-index:2;
-    left:5vw; top:50%; transform:translateY(-52%) rotate(-.3deg);
-    width:min(48vw, 740px);
-    background:#FFFFFF; border:1.5px solid var(--hairline); border-radius:26px;
-    box-shadow:0 14px 40px rgba(74, 62, 38, .10);
-    padding:38px 42px 30px;
+    left:4vw; top:50%; transform:translateY(-54%) rotate(-.3deg);
+    width:min(50vw, 760px);
   }
-  .board h1{
-    font-weight:500; font-size:15px; line-height:18px;
-    letter-spacing:3px; color:var(--muted); text-transform:uppercase;
-    margin-bottom:16px;
-  }
-  .board .rule{height:1px; background:var(--hairline); margin-bottom:10px}
-  .board svg{display:block; width:100%; height:auto}
+  .sketch svg{display:block; width:100%; height:auto}
 
   .richard{
     position:absolute; z-index:1; right:-2vw; bottom:0;
@@ -58,67 +48,113 @@
     animation:breath 6.4s ease-in-out infinite;
   }
   @keyframes breath{0%,100%{transform:scale(1)} 50%{transform:scale(1.007)}}
-  .beat{position:relative; transform-origin:50% 100%; transition:transform 460ms cubic-bezier(.33,0,.35,1)}
-  .beat.notice{transform:translateY(-10px) scale(.988); transition-duration:110ms}
-  .beat.tip{transform:rotate(-1.2deg) scale(1.015); transition-duration:220ms}
   .richard img{display:block; width:100%; height:auto}
   .richard .patch{position:absolute; opacity:0}
   .richard .lid{left:29.297%; top:38.086%; width:41.992%}
   .richard .mouth{left:30.762%; top:51.758%; width:39.062%}
+
+  /* CHILLING BLINKS — pure CSS, hard step cuts, one blink per 8.6s cycle
+     (0-45ms half, 45-145 closed, 145-200 half, open the rest). The cycle
+     starting at 0% doubles as the entrance blink. */
+  .richard .lid.half{animation:lidHalf 8.6s step-end infinite}
+  .richard .lid.shut{animation:lidShut 8.6s step-end infinite}
+  @keyframes lidHalf{
+    0%{opacity:1} 0.52%{opacity:0} 1.69%{opacity:1} 2.33%{opacity:0} 100%{opacity:0}
+  }
+  @keyframes lidShut{
+    0%{opacity:0} 0.52%{opacity:1} 1.69%{opacity:0} 100%{opacity:0}
+  }
+
+  /* THE ANSWER BEAT (class .perform on <body>) — all CSS, one shot:
+     noticing lift + double blink + head-tip (on .beat), then a 2.95s
+     syllabic mouth pattern in hard cuts while the voice plays. */
+  .beat{position:relative; transform-origin:50% 100%}
+  .perform .beat{animation:beatMove 2.2s cubic-bezier(.33,0,.35,1) 1}
+  @keyframes beatMove{
+    0%{transform:none}
+    5%,14%{transform:translateY(-10px) scale(.988)}
+    26%{transform:none}
+    34%,72%{transform:rotate(-1.2deg) scale(1.015)}
+    100%{transform:none}
+  }
+  /* double blink while noticing, then the idle cycle resumes */
+  .perform .lid.half{animation:performHalf 8.6s step-end 1}
+  .perform .lid.shut{animation:performShut 8.6s step-end 1}
+  @keyframes performHalf{
+    0%{opacity:1} 0.52%{opacity:0} 1.69%{opacity:1} 2.33%{opacity:0}
+    3.26%{opacity:1} 3.78%{opacity:0} 4.94%{opacity:1} 5.58%{opacity:0} 100%{opacity:0}
+  }
+  @keyframes performShut{
+    0%{opacity:0} 0.52%{opacity:1} 1.69%{opacity:0}
+    3.78%{opacity:1} 4.94%{opacity:0} 100%{opacity:0}
+  }
+  /* the syllabic mouth — 2.95s, step cuts, self-ending (iteration 1) */
+  .perform .mouth.m1{animation:talkSmall 2.95s step-end 1 .55s}
+  .perform .mouth.m2{animation:talkHalf 2.95s step-end 1 .55s}
+  .perform .mouth.m3{animation:talkOpen 2.95s step-end 1 .55s}
+  @keyframes talkSmall{
+    0%{opacity:0} 4%{opacity:1} 12%{opacity:0} 20%{opacity:1} 26%{opacity:0}
+    36%{opacity:1} 42%{opacity:0} 55%{opacity:1} 61%{opacity:0}
+    72%{opacity:1} 78%{opacity:0} 88%{opacity:1} 93%{opacity:0} 100%{opacity:0}
+  }
+  @keyframes talkHalf{
+    0%{opacity:0} 12%{opacity:1} 20%{opacity:0} 29%{opacity:1} 36%{opacity:0}
+    46%{opacity:1} 52%{opacity:0} 61%{opacity:1} 67%{opacity:0}
+    78%{opacity:1} 83%{opacity:0} 100%{opacity:0}
+  }
+  @keyframes talkOpen{
+    0%{opacity:0} 26%{opacity:1} 29%{opacity:0} 42%{opacity:1} 46%{opacity:0}
+    67%{opacity:1} 72%{opacity:0} 83%{opacity:1} 88%{opacity:0} 100%{opacity:0}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .breath, .richard .lid{animation:none}
+  }
 </style>
 </head>
 <body>
   <div class="stage" id="stage">
-    <div class="board">
-      <h1>Nima</h1>
-      <div class="rule"></div>
-      <!-- Richard's board, as a still life: the demo's signature figure —
-           the line y = 2x + 3, its climb step, the crossing at (0, 3). -->
-      <svg viewBox="0 0 640 430" fill="none" aria-hidden="true">
+    <div class="sketch" aria-hidden="true">
+      <!-- Richard's board world as pure decoration: the line y = 2x + 3,
+           its climb step, the crossing — math only, no words. -->
+      <svg viewBox="0 0 640 430" fill="none">
         <g stroke="#B9B1A2" stroke-width="2" stroke-linecap="round">
           <path d="M 70 384 L 596 384" />
           <path d="M 96 410 L 96 40" />
           <path d="M 588 378 L 596 384 L 588 390" />
           <path d="M 90 48 L 96 40 L 102 48" />
         </g>
-        <g font-family="Ubuntu, sans-serif" font-size="21" fill="#6C6456">
+        <g font-family="system-ui, sans-serif" font-size="21" fill="#6C6456" font-style="italic">
           <text x="588" y="416">x</text>
           <text x="64" y="46">y</text>
         </g>
-        <!-- the line y = 2x + 3, ink -->
         <path d="M 118 372 C 240 268, 380 148, 560 4" stroke="#211E18" stroke-width="5" stroke-linecap="round"/>
-        <!-- crossing (0,3): open amber circle on the y-axis -->
         <circle cx="96" cy="290" r="11" stroke="#DE7F35" stroke-width="4.5" fill="#FFFFFF"/>
-        <text x="34" y="297" font-family="Ubuntu, sans-serif" font-size="22" fill="#DE7F35">(0,3)</text>
-        <!-- the climb step: 1 right, 2 up, teal -->
+        <text x="30" y="297" font-family="system-ui, sans-serif" font-size="22" fill="#DE7F35">(0,3)</text>
         <g stroke="#0E7C67" stroke-width="4.5" stroke-linecap="round">
           <path d="M 230 262 L 306 262" stroke-dasharray="1 9"/>
           <path d="M 306 262 L 306 196" />
           <path d="M 300 204 L 306 196 L 312 204" />
         </g>
-        <text x="252" y="292" font-family="Ubuntu, sans-serif" font-size="21" fill="#0E7C67">1</text>
-        <text x="318" y="238" font-family="Ubuntu, sans-serif" font-size="21" fill="#0E7C67">2</text>
-        <!-- the formula, color per symbol like the app's boards -->
-        <g font-family="Ubuntu, sans-serif" font-size="40">
+        <text x="252" y="292" font-family="system-ui, sans-serif" font-size="21" fill="#0E7C67">1</text>
+        <text x="318" y="238" font-family="system-ui, sans-serif" font-size="21" fill="#0E7C67">2</text>
+        <g font-family="system-ui, sans-serif" font-size="40">
           <text x="392" y="330" fill="#211E18">y = </text>
           <text x="464" y="330" fill="#0E7C67" font-weight="700">2</text>
           <text x="488" y="330" fill="#211E18">x + </text>
           <text x="558" y="330" fill="#DE7F35" font-weight="700">3</text>
         </g>
-        <!-- a quiet margin note -->
-        <text x="120" y="86" font-family="Ubuntu, sans-serif" font-size="20" fill="#6C6456" transform="rotate(-2 120 86)">every step right climbs the same</text>
       </svg>
     </div>
 
     <div class="richard" aria-hidden="true">
       <div class="breath">
-        <div class="beat" id="beat">
+        <div class="beat">
           <img src="richard.png" alt="" fetchpriority="high" />
-          <img class="patch lid" id="lidHalf" src="blink-half.png" alt="" />
-          <img class="patch lid" id="lidClosed" src="blink.png" alt="" />
-          <img class="patch mouth" id="mSmall" src="mouth-small.png" alt="" />
-          <img class="patch mouth" id="mHalf" src="mouth-half.png" alt="" />
-          <img class="patch mouth" id="mOpen" src="mouth-open.png" alt="" />
+          <img class="patch lid half" src="blink-half.png" alt="" />
+          <img class="patch lid shut" src="blink.png" alt="" />
+          <img class="patch mouth m1" src="mouth-small.png" alt="" />
+          <img class="patch mouth m2" src="mouth-half.png" alt="" />
+          <img class="patch mouth m3" src="mouth-open.png" alt="" />
         </div>
       </div>
     </div>
@@ -127,114 +163,26 @@
   <audio id="voice" src="yc-answer.mp3" preload="auto"></audio>
 
   <script>
-    var $ = function (id) { return document.getElementById(id); };
-    var half = $('lidHalf'), closed = $('lidClosed');
-    var mouths = [$('mSmall'), $('mHalf'), $('mOpen')];
-    var beat = $('beat'), voice = $('voice');
-
-    // — Lids. One authority over both keyframes; every path ends OPEN.
-    var blinking = false;
-    function lids(state) { // 'open' | 'half' | 'closed'
-      half.style.opacity = state === 'half' ? 1 : 0;
-      closed.style.opacity = state === 'closed' ? 1 : 0;
-    }
-    function blink() {
-      if (blinking) return;
-      blinking = true;
-      lids('half');
-      setTimeout(function () {
-        lids('closed');
-        setTimeout(function () {
-          lids('half');
-          setTimeout(function () { lids('open'); blinking = false; }, 55);
-        }, 100);
-      }, 45);
-    }
-    (function schedule() {
-      setTimeout(function () { blink(); schedule(); }, 6000 + Math.random() * 5000);
-    })();
-    setTimeout(blink, 700);
-
-    // — Mouth. THE APP'S MECHANISM: the audio's loudness rides a
-    //   fast-attack/slow-decay envelope across four hard-cut shapes
-    //   (closed/small/half/wide at 0.22/0.5/0.75), sampled every 90ms.
-    var audioCtx = null, analyser = null, mouthTimer = null;
-    function setMouth(f) {
-      for (var i = 0; i < 3; i++) mouths[i].style.opacity = (f === i + 1) ? 1 : 0;
-    }
-    function wireAnalyser() {
-      if (analyser) return true;
-      try {
-        var AC = window.AudioContext || window.webkitAudioContext;
-        audioCtx = new AC();
-        var src = audioCtx.createMediaElementSource(voice);
-        analyser = audioCtx.createAnalyser();
-        analyser.fftSize = 512;
-        src.connect(analyser);
-        analyser.connect(audioCtx.destination);
-        return true;
-      } catch (e) { analyser = null; return false; }
-    }
-    function startMouth() {
-      var envelope = 0;
-      var data = analyser ? new Uint8Array(analyser.fftSize) : null;
-      // Fallback pool if WebAudio is unavailable: the app's syllabic bursts.
-      var SHAPES = [1, 1, 2, 2, 3];
-      var burst = 2 + Math.floor(Math.random() * 4), pause = 0;
-      mouthTimer = setInterval(function () {
-        var f;
-        if (analyser) {
-          analyser.getByteTimeDomainData(data);
-          var sum = 0;
-          for (var i = 0; i < data.length; i++) { var d = (data[i] - 128) / 128; sum += d * d; }
-          var level = Math.min(1, Math.sqrt(sum / data.length) * 9);
-          envelope = Math.max(level, envelope * 0.8);
-          f = envelope < 0.22 ? 0 : envelope < 0.5 ? 1 : envelope < 0.75 ? 2 : 3;
-        } else {
-          if (pause > 0) { pause -= 1; f = 0; if (pause === 0) burst = 3 + Math.floor(Math.random() * 4); }
-          else { f = SHAPES[Math.floor(Math.random() * SHAPES.length)]; burst -= 1; if (burst <= 0) pause = 1 + Math.floor(Math.random() * 3); }
-        }
-        setMouth(f);
-      }, 90);
-    }
-    function stopMouth() {
-      clearInterval(mouthTimer); mouthTimer = null; setMouth(0);
-    }
-    voice.addEventListener('ended', stopMouth);
-    voice.addEventListener('pause', stopMouth);
-
-    // — The answer beat: noticing lift + double blink, head-tip, then the
-    //   voice. Eyes are FORCED open the moment he starts speaking.
-    var running = false;
-    function trigger() {
-      if (running) { // replay: rewind and go again
-        voice.pause(); stopMouth(); running = false;
+    // The whole beat is CSS; this only flips the class (works from an
+    // external `cmux browser eval` even when the webview suspends timers)
+    // and best-effort plays the page audio (needs a gesture in normal
+    // browsers; the wall lane plays the voice via afplay instead).
+    var voice = document.getElementById('voice');
+    window.__perform = function (withAudio) {
+      var b = document.body;
+      b.classList.remove('perform');
+      void b.offsetWidth; // reflow: restart the one-shot animations cleanly
+      b.classList.add('perform');
+      if (withAudio !== false) {
+        try {
+          voice.currentTime = 0;
+          var p = voice.play();
+          if (p && p.catch) p.catch(function () {});
+        } catch (e) {}
       }
-      running = true;
-      beat.classList.add('notice');
-      blink(); setTimeout(blink, 280);
-      setTimeout(function () { beat.classList.remove('notice'); }, 350);
-      setTimeout(function () {
-        beat.classList.add('tip');
-        setTimeout(function () { beat.classList.remove('tip'); }, 650);
-        if (!blinking) lids('open'); // speak with open eyes, always
-        wireAnalyser();
-        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-        voice.currentTime = 0;
-        stopMouth();
-        var p = voice.play();
-        startMouth();
-        if (p && p.catch) p.catch(function () { /* no gesture (gamepad-only): mouth runs on the fallback, silent */ });
-        voice.addEventListener('ended', function done() {
-          running = false; voice.removeEventListener('ended', done);
-        });
-      }, 700);
-    }
-    window.__trigger = function (instant) { if (instant) { lids('open'); } else trigger(); };
-
-    // — Inputs: any key, any tap/click, any gamepad button.
-    document.addEventListener('keydown', function (e) { if (!e.repeat) trigger(); });
-    document.addEventListener('pointerdown', function () { trigger(); });
+    };
+    document.addEventListener('keydown', function (e) { if (!e.repeat) window.__perform(); });
+    document.addEventListener('pointerdown', function () { window.__perform(); });
     var padWas = false;
     (function pollPad() {
       var pads = navigator.getGamepads ? navigator.getGamepads() : [];
@@ -243,7 +191,7 @@
         var p = pads[i];
         if (p) for (var b = 0; b < p.buttons.length; b++) if (p.buttons[b].pressed) down = true;
       }
-      if (down && !padWas) trigger();
+      if (down && !padWas) window.__perform();
       padWas = down;
       requestAnimationFrame(pollPad);
     })();
