@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nima</title>
+<meta name="robots" content="noindex" />
+<meta name="theme-color" content="#F5F2EA" />
+<link rel="icon" type="image/png" href="favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  /* YC-video page: Richard alone with his whiteboard, chilling. One press
+     (any key / tap / 8BitDo button) = the noticing beat, then he answers,
+     talking while the line writes itself onto the board. Press again to
+     reset and replay (multiple takes). ?line=... overrides the answer. */
+  :root{
+    --ink:#211E18; --muted:#6C6456; --hairline:#E7E1D4;
+    --teal:#0E7C67;
+  }
+  *{box-sizing:border-box; margin:0}
+  html,body{height:100%}
+  body{
+    background:#F5F2EA; color:var(--ink);
+    font-family:"Ubuntu",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow:hidden; cursor:none;
+  }
+  .stage{position:relative; height:100svh}
+
+  .board{
+    position:absolute; z-index:2;
+    left:5vw; top:50%; transform:translateY(-52%);
+    width:min(52vw, 780px); min-height:46vh;
+    background:#FFFFFF; border:1.5px solid var(--hairline); border-radius:26px;
+    box-shadow:0 14px 40px rgba(74, 62, 38, .10);
+    padding:40px 44px;
+  }
+  .board h1{
+    font-weight:500; font-size:15px; line-height:18px;
+    letter-spacing:3px; color:var(--muted); text-transform:uppercase;
+    margin-bottom:16px;
+  }
+  .board .rule{height:1px; background:var(--hairline); margin-bottom:30px}
+  #answer{
+    font-size:clamp(26px, 3.2vw, 40px); line-height:1.42; font-weight:400;
+    min-height:1.5em; letter-spacing:-.01em;
+  }
+  #answer .caret{color:var(--teal); animation:caret 900ms steps(1) infinite}
+  @keyframes caret{50%{opacity:0}}
+
+  .richard{
+    position:absolute; z-index:1; right:-2vw; bottom:0;
+    width:min(74vh, 46vw);
+    pointer-events:none; user-select:none;
+  }
+  .breath{
+    position:relative; transform-origin:50% 100%;
+    animation:breath 6.4s ease-in-out infinite;
+  }
+  @keyframes breath{0%,100%{transform:scale(1)} 50%{transform:scale(1.007)}}
+  /* The beat layer: noticing lift + the talking head-tip, app-calibrated. */
+  .beat{position:relative; transform-origin:50% 100%; transition:transform 460ms cubic-bezier(.33,0,.35,1)}
+  .beat.notice{transform:translateY(-10px) scale(.988); transition-duration:110ms}
+  .beat.tip{transform:rotate(-1.2deg) scale(1.015); transition-duration:220ms}
+  .richard img{display:block; width:100%; height:auto}
+  .patch{position:absolute; opacity:0}
+  .lid{left:29.297%; top:38.086%; width:41.992%}
+  .mouth{left:30.762%; top:51.758%; width:39.062%}
+</style>
+</head>
+<body>
+  <div class="stage" id="stage">
+    <div class="board">
+      <h1>Nima</h1>
+      <div class="rule"></div>
+      <div id="answer"></div>
+    </div>
+    <div class="richard" aria-hidden="true">
+      <div class="breath">
+        <div class="beat" id="beat">
+          <img src="richard.png" alt="" fetchpriority="high" />
+          <img class="patch lid" id="lidHalf" src="blink-half.png" alt="" />
+          <img class="patch lid" id="lidClosed" src="blink.png" alt="" />
+          <img class="patch mouth" id="mSmall" src="mouth-small.png" alt="" />
+          <img class="patch mouth" id="mHalf" src="mouth-half.png" alt="" />
+          <img class="patch mouth" id="mOpen" src="mouth-open.png" alt="" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // The answer line. Override for takes without a deploy: yc.html?line=...
+    var LINE = new URLSearchParams(location.search).get('line') ||
+      "Can't wait for San Francisco. Bring me your hardest students.";
+
+    var $ = function (id) { return document.getElementById(id); };
+    var half = $('lidHalf'), closed = $('lidClosed');
+    var mouths = [$('mSmall'), $('mHalf'), $('mOpen')];
+    var beat = $('beat'), answer = $('answer');
+
+    // — Chilling: rare hard-cut blinks (the app's rhythm) + CSS breathing.
+    var blinking = false;
+    function blink() {
+      if (blinking) return;
+      blinking = true;
+      half.style.opacity = 1;
+      setTimeout(function () {
+        closed.style.opacity = 1; half.style.opacity = 0;
+        setTimeout(function () {
+          closed.style.opacity = 0; half.style.opacity = 1;
+          setTimeout(function () { half.style.opacity = 0; blinking = false; }, 55);
+        }, 100);
+      }, 45);
+    }
+    (function schedule() {
+      setTimeout(function () { blink(); schedule(); }, 6000 + Math.random() * 5000);
+    })();
+    setTimeout(blink, 700);
+
+    // — Talking: the app's syllabic fallback — bursts of shapes with
+    //   closed-lip micro-pauses, hard cuts at 90ms, never uniform noise.
+    var talkTimer = null;
+    function setMouth(f) {
+      for (var i = 0; i < 3; i++) mouths[i].style.opacity = (f === i + 1) ? 1 : 0;
+    }
+    function startTalking() {
+      var SHAPES = [1, 1, 2, 2, 3];
+      var burst = 2 + Math.floor(Math.random() * 4), pause = 0;
+      talkTimer = setInterval(function () {
+        var f;
+        if (pause > 0) { pause -= 1; f = 0; if (pause === 0) burst = 3 + Math.floor(Math.random() * 4); }
+        else { f = SHAPES[Math.floor(Math.random() * SHAPES.length)]; burst -= 1; if (burst <= 0) pause = 1 + Math.floor(Math.random() * 3); }
+        setMouth(f);
+      }, 90);
+    }
+    function stopTalking() {
+      clearInterval(talkTimer); talkTimer = null; setMouth(0);
+    }
+
+    // — The answer beat: noticing lift + double blink, head-tip, then the
+    //   line writes onto the board while he talks. Press again = replay.
+    var running = false;
+    function trigger(instant) {
+      if (running && !instant) { reset(); }
+      running = true;
+      answer.innerHTML = '';
+      if (instant) { answer.textContent = LINE; return; }
+      beat.classList.add('notice');
+      blink(); setTimeout(blink, 280);
+      setTimeout(function () { beat.classList.remove('notice'); }, 350);
+      setTimeout(function () {
+        beat.classList.add('tip');
+        setTimeout(function () { beat.classList.remove('tip'); }, 650);
+        startTalking();
+        var i = 0;
+        answer.innerHTML = '<span id="txt"></span><span class="caret">▍</span>';
+        var txt = $('txt');
+        (function write() {
+          if (i < LINE.length) {
+            txt.textContent = LINE.slice(0, ++i);
+            setTimeout(write, 26 + Math.random() * 34);
+          } else {
+            setTimeout(function () {
+              stopTalking();
+              var c = answer.querySelector('.caret'); if (c) c.remove();
+              running = false;
+            }, 380);
+          }
+        })();
+      }, 900);
+    }
+    function reset() {
+      stopTalking(); answer.innerHTML = ''; running = false;
+    }
+    window.__trigger = trigger; // websnap/testing hook
+
+    // — Inputs: any key, any tap/click, any gamepad button (8BitDo in
+    //   keyboard OR controller mode both land here).
+    document.addEventListener('keydown', function (e) { if (!e.repeat) trigger(); });
+    document.addEventListener('pointerdown', function () { trigger(); });
+    var padWas = false;
+    (function pollPad() {
+      var pads = navigator.getGamepads ? navigator.getGamepads() : [];
+      var down = false;
+      for (var i = 0; i < pads.length; i++) {
+        var p = pads[i];
+        if (p) for (var b = 0; b < p.buttons.length; b++) if (p.buttons[b].pressed) down = true;
+      }
+      if (down && !padWas) trigger();
+      padWas = down;
+      requestAnimationFrame(pollPad);
+    })();
+  </script>
+</body>
+</html>
