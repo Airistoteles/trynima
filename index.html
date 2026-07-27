@@ -23,7 +23,7 @@
   *{box-sizing:border-box; margin:0}
   html,body{height:100%}
   body{
-    background:#F5F2EA; color:var(--ink);
+    background:#FFFFFF; color:var(--ink);
     font-family:"Ubuntu",system-ui,sans-serif;
     -webkit-font-smoothing:antialiased;
   }
@@ -35,11 +35,11 @@
 
   /* THE WHITEBOARD — board type at the app's demo-large ramp:
      header in the label voice, 24/34 body. */
+  /* THE WHITEBOARD IS THE PAGE (the app's law: clean white, generous
+     margins, no card — the ink is the design). */
   .board{
     position:relative; z-index:2;
-    max-width:640px; margin:44px 26px 0; padding:32px 30px 12px;
-    background:#FFFFFF; border:1.5px solid var(--hairline); border-radius:22px;
-    box-shadow:0 12px 32px rgba(74, 62, 38, .09);
+    max-width:660px; padding:56px 30px 8px;
   }
   .board h1{
     font-weight:500; font-size:13px; line-height:16px;
@@ -103,7 +103,7 @@
 
   .board-wrap{display:flex; flex-direction:column}
   .spacer{flex:1}
-  .small-board{background:none; border:none; box-shadow:none; padding:18px 30px 26px; margin-top:0}
+  .small-board{padding:14px 30px 26px}
   /* Small screens: Richard gets his own bottom strip below the text — the
      board never runs over his face. He stays bottom-pinned inside it. */
   @media (max-width: 700px){
