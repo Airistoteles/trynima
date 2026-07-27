@@ -104,8 +104,9 @@
     .richard-inner{animation:none}
   }
 
-  .board-wrap{flex:1; display:flex; flex-direction:column}
+  .board-wrap{display:flex; flex-direction:column}
   .spacer{flex:1}
+  .small-board{padding-top:0}
   /* Small screens: Richard gets his own bottom strip below the text — the
      board never runs over his face. He stays bottom-pinned inside it. */
   @media (max-width: 700px){
@@ -113,8 +114,9 @@
     .board p{font-size:20px; line-height:29px}
     .richard{
       position:relative; right:auto; bottom:auto;
-      width:auto; height:46vh; margin-top:auto;
+      width:auto; height:44vh; margin-top:10px; flex:none;
     }
+    .small-board{padding-top:22px; padding-bottom:30px}
     .richard-inner{
       position:absolute; bottom:0; right:-6vw;
       width:min(38vh, 88vw);
@@ -139,7 +141,20 @@
           <button type="submit">Try Nima early</button>
         </form>
         <p class="thanks" id="thanks" hidden>Thanks — we'll reach out shortly to get you in.</p>
-        <div class="small">
+      </div>
+      <div class="spacer"></div>
+    </div>
+
+    <div class="richard" aria-hidden="true">
+      <div class="richard-inner" id="richard">
+        <img src="richard.png" alt="" fetchpriority="high" />
+        <img class="lid" id="lidHalf" src="blink-half.png" alt="" />
+        <img class="lid" id="lidClosed" src="blink.png" alt="" />
+      </div>
+    </div>
+
+    <div class="board small-board">
+      <div class="small">
           <p>By the founders of WisWiz, a maths tutoring app used by thousands of students across the Netherlands — featured in <a href="https://fd.nl/tech-en-innovatie/1588534/als-we-ook-menselijke-druk-in-de-app-kunnen-zetten-dan-zijn-we-klaar">Het Financieele Dagblad</a> and <a href="https://www.parool.nl/ps/bijles-in-je-broekzak-philip-20-en-stijn-21-ontwikkelden-een-wiskunde-app-voor-scholieren~b0f76f47/">Het Parool</a>.</p>
           <div class="founders">
             <a class="founder" href="https://www.linkedin.com/in/louis-vetter/">
@@ -161,16 +176,6 @@
             <button type="submit">Send</button>
           </form>
           <p class="thanks" id="contactthanks" hidden style="margin:8px 0 0">Thanks — your message is on its way.</p>
-        </div>
-      </div>
-      <div class="spacer"></div>
-    </div>
-
-    <div class="richard" aria-hidden="true">
-      <div class="richard-inner" id="richard">
-        <img src="richard.png" alt="" fetchpriority="high" />
-        <img class="lid" id="lidHalf" src="blink-half.png" alt="" />
-        <img class="lid" id="lidClosed" src="blink.png" alt="" />
       </div>
     </div>
   </div>
