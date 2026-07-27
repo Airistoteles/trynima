@@ -11,13 +11,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet" />
 <style>
-  /* YC-video page: Richard alone with his whiteboard, chilling. One press
-     (any key / tap / 8BitDo button) = the noticing beat, then he answers,
-     talking while the line writes itself onto the board. Press again to
-     reset and replay (multiple takes). ?line=... overrides the answer. */
+  /* YC-video page. Richard chilling beside his (decorative) whiteboard.
+     One press (any key / tap / 8BitDo button): the noticing beat, then he
+     SPEAKS the line in his real ElevenLabs voice while the mouth follows
+     the audio's loudness envelope — the app's actual mechanism. Press
+     again = replay. No text on the board; the voice carries it. */
   :root{
     --ink:#211E18; --muted:#6C6456; --hairline:#E7E1D4;
-    --teal:#0E7C67;
+    --teal:#0E7C67; --amber:#DE7F35;
   }
   *{box-sizing:border-box; margin:0}
   html,body{height:100%}
@@ -29,26 +30,23 @@
   }
   .stage{position:relative; height:100svh}
 
+  /* THE WHITEBOARD — a beautiful prop: Richard's actual board world
+     (the line y = 2x + 3 with its climb step), drawn in marker strokes. */
   .board{
     position:absolute; z-index:2;
-    left:5vw; top:50%; transform:translateY(-52%);
-    width:min(52vw, 780px); min-height:46vh;
+    left:5vw; top:50%; transform:translateY(-52%) rotate(-.3deg);
+    width:min(48vw, 740px);
     background:#FFFFFF; border:1.5px solid var(--hairline); border-radius:26px;
     box-shadow:0 14px 40px rgba(74, 62, 38, .10);
-    padding:40px 44px;
+    padding:38px 42px 30px;
   }
   .board h1{
     font-weight:500; font-size:15px; line-height:18px;
     letter-spacing:3px; color:var(--muted); text-transform:uppercase;
     margin-bottom:16px;
   }
-  .board .rule{height:1px; background:var(--hairline); margin-bottom:30px}
-  #answer{
-    font-size:clamp(26px, 3.2vw, 40px); line-height:1.42; font-weight:400;
-    min-height:1.5em; letter-spacing:-.01em;
-  }
-  #answer .caret{color:var(--teal); animation:caret 900ms steps(1) infinite}
-  @keyframes caret{50%{opacity:0}}
+  .board .rule{height:1px; background:var(--hairline); margin-bottom:10px}
+  .board svg{display:block; width:100%; height:auto}
 
   .richard{
     position:absolute; z-index:1; right:-2vw; bottom:0;
@@ -60,7 +58,6 @@
     animation:breath 6.4s ease-in-out infinite;
   }
   @keyframes breath{0%,100%{transform:scale(1)} 50%{transform:scale(1.007)}}
-  /* The beat layer: noticing lift + the talking head-tip, app-calibrated. */
   .beat{position:relative; transform-origin:50% 100%; transition:transform 460ms cubic-bezier(.33,0,.35,1)}
   .beat.notice{transform:translateY(-10px) scale(.988); transition-duration:110ms}
   .beat.tip{transform:rotate(-1.2deg) scale(1.015); transition-duration:220ms}
@@ -75,8 +72,44 @@
     <div class="board">
       <h1>Nima</h1>
       <div class="rule"></div>
-      <div id="answer"></div>
+      <!-- Richard's board, as a still life: the demo's signature figure —
+           the line y = 2x + 3, its climb step, the crossing at (0, 3). -->
+      <svg viewBox="0 0 640 430" fill="none" aria-hidden="true">
+        <g stroke="#B9B1A2" stroke-width="2" stroke-linecap="round">
+          <path d="M 70 384 L 596 384" />
+          <path d="M 96 410 L 96 40" />
+          <path d="M 588 378 L 596 384 L 588 390" />
+          <path d="M 90 48 L 96 40 L 102 48" />
+        </g>
+        <g font-family="Ubuntu, sans-serif" font-size="21" fill="#6C6456">
+          <text x="588" y="416">x</text>
+          <text x="64" y="46">y</text>
+        </g>
+        <!-- the line y = 2x + 3, ink -->
+        <path d="M 118 372 C 240 268, 380 148, 560 4" stroke="#211E18" stroke-width="5" stroke-linecap="round"/>
+        <!-- crossing (0,3): open amber circle on the y-axis -->
+        <circle cx="96" cy="290" r="11" stroke="#DE7F35" stroke-width="4.5" fill="#FFFFFF"/>
+        <text x="34" y="297" font-family="Ubuntu, sans-serif" font-size="22" fill="#DE7F35">(0,3)</text>
+        <!-- the climb step: 1 right, 2 up, teal -->
+        <g stroke="#0E7C67" stroke-width="4.5" stroke-linecap="round">
+          <path d="M 230 262 L 306 262" stroke-dasharray="1 9"/>
+          <path d="M 306 262 L 306 196" />
+          <path d="M 300 204 L 306 196 L 312 204" />
+        </g>
+        <text x="252" y="292" font-family="Ubuntu, sans-serif" font-size="21" fill="#0E7C67">1</text>
+        <text x="318" y="238" font-family="Ubuntu, sans-serif" font-size="21" fill="#0E7C67">2</text>
+        <!-- the formula, color per symbol like the app's boards -->
+        <g font-family="Ubuntu, sans-serif" font-size="40">
+          <text x="392" y="330" fill="#211E18">y = </text>
+          <text x="464" y="330" fill="#0E7C67" font-weight="700">2</text>
+          <text x="488" y="330" fill="#211E18">x + </text>
+          <text x="558" y="330" fill="#DE7F35" font-weight="700">3</text>
+        </g>
+        <!-- a quiet margin note -->
+        <text x="120" y="86" font-family="Ubuntu, sans-serif" font-size="20" fill="#6C6456" transform="rotate(-2 120 86)">every step right climbs the same</text>
+      </svg>
     </div>
+
     <div class="richard" aria-hidden="true">
       <div class="breath">
         <div class="beat" id="beat">
@@ -91,27 +124,29 @@
     </div>
   </div>
 
-  <script>
-    // The answer line. Override for takes without a deploy: yc.html?line=...
-    var LINE = new URLSearchParams(location.search).get('line') ||
-      "Can't wait for San Francisco. Bring me your hardest students.";
+  <audio id="voice" src="yc-answer.mp3" preload="auto"></audio>
 
+  <script>
     var $ = function (id) { return document.getElementById(id); };
     var half = $('lidHalf'), closed = $('lidClosed');
     var mouths = [$('mSmall'), $('mHalf'), $('mOpen')];
-    var beat = $('beat'), answer = $('answer');
+    var beat = $('beat'), voice = $('voice');
 
-    // — Chilling: rare hard-cut blinks (the app's rhythm) + CSS breathing.
+    // — Lids. One authority over both keyframes; every path ends OPEN.
     var blinking = false;
+    function lids(state) { // 'open' | 'half' | 'closed'
+      half.style.opacity = state === 'half' ? 1 : 0;
+      closed.style.opacity = state === 'closed' ? 1 : 0;
+    }
     function blink() {
       if (blinking) return;
       blinking = true;
-      half.style.opacity = 1;
+      lids('half');
       setTimeout(function () {
-        closed.style.opacity = 1; half.style.opacity = 0;
+        lids('closed');
         setTimeout(function () {
-          closed.style.opacity = 0; half.style.opacity = 1;
-          setTimeout(function () { half.style.opacity = 0; blinking = false; }, 55);
+          lids('half');
+          setTimeout(function () { lids('open'); blinking = false; }, 55);
         }, 100);
       }, 45);
     }
@@ -120,65 +155,84 @@
     })();
     setTimeout(blink, 700);
 
-    // — Talking: the app's syllabic fallback — bursts of shapes with
-    //   closed-lip micro-pauses, hard cuts at 90ms, never uniform noise.
-    var talkTimer = null;
+    // — Mouth. THE APP'S MECHANISM: the audio's loudness rides a
+    //   fast-attack/slow-decay envelope across four hard-cut shapes
+    //   (closed/small/half/wide at 0.22/0.5/0.75), sampled every 90ms.
+    var audioCtx = null, analyser = null, mouthTimer = null;
     function setMouth(f) {
       for (var i = 0; i < 3; i++) mouths[i].style.opacity = (f === i + 1) ? 1 : 0;
     }
-    function startTalking() {
+    function wireAnalyser() {
+      if (analyser) return true;
+      try {
+        var AC = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AC();
+        var src = audioCtx.createMediaElementSource(voice);
+        analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 512;
+        src.connect(analyser);
+        analyser.connect(audioCtx.destination);
+        return true;
+      } catch (e) { analyser = null; return false; }
+    }
+    function startMouth() {
+      var envelope = 0;
+      var data = analyser ? new Uint8Array(analyser.fftSize) : null;
+      // Fallback pool if WebAudio is unavailable: the app's syllabic bursts.
       var SHAPES = [1, 1, 2, 2, 3];
       var burst = 2 + Math.floor(Math.random() * 4), pause = 0;
-      talkTimer = setInterval(function () {
+      mouthTimer = setInterval(function () {
         var f;
-        if (pause > 0) { pause -= 1; f = 0; if (pause === 0) burst = 3 + Math.floor(Math.random() * 4); }
-        else { f = SHAPES[Math.floor(Math.random() * SHAPES.length)]; burst -= 1; if (burst <= 0) pause = 1 + Math.floor(Math.random() * 3); }
+        if (analyser) {
+          analyser.getByteTimeDomainData(data);
+          var sum = 0;
+          for (var i = 0; i < data.length; i++) { var d = (data[i] - 128) / 128; sum += d * d; }
+          var level = Math.min(1, Math.sqrt(sum / data.length) * 9);
+          envelope = Math.max(level, envelope * 0.8);
+          f = envelope < 0.22 ? 0 : envelope < 0.5 ? 1 : envelope < 0.75 ? 2 : 3;
+        } else {
+          if (pause > 0) { pause -= 1; f = 0; if (pause === 0) burst = 3 + Math.floor(Math.random() * 4); }
+          else { f = SHAPES[Math.floor(Math.random() * SHAPES.length)]; burst -= 1; if (burst <= 0) pause = 1 + Math.floor(Math.random() * 3); }
+        }
         setMouth(f);
       }, 90);
     }
-    function stopTalking() {
-      clearInterval(talkTimer); talkTimer = null; setMouth(0);
+    function stopMouth() {
+      clearInterval(mouthTimer); mouthTimer = null; setMouth(0);
     }
+    voice.addEventListener('ended', stopMouth);
+    voice.addEventListener('pause', stopMouth);
 
     // — The answer beat: noticing lift + double blink, head-tip, then the
-    //   line writes onto the board while he talks. Press again = replay.
+    //   voice. Eyes are FORCED open the moment he starts speaking.
     var running = false;
-    function trigger(instant) {
-      if (running && !instant) { reset(); }
+    function trigger() {
+      if (running) { // replay: rewind and go again
+        voice.pause(); stopMouth(); running = false;
+      }
       running = true;
-      answer.innerHTML = '';
-      if (instant) { answer.textContent = LINE; return; }
       beat.classList.add('notice');
       blink(); setTimeout(blink, 280);
       setTimeout(function () { beat.classList.remove('notice'); }, 350);
       setTimeout(function () {
         beat.classList.add('tip');
         setTimeout(function () { beat.classList.remove('tip'); }, 650);
-        startTalking();
-        var i = 0;
-        answer.innerHTML = '<span id="txt"></span><span class="caret">▍</span>';
-        var txt = $('txt');
-        (function write() {
-          if (i < LINE.length) {
-            txt.textContent = LINE.slice(0, ++i);
-            setTimeout(write, 26 + Math.random() * 34);
-          } else {
-            setTimeout(function () {
-              stopTalking();
-              var c = answer.querySelector('.caret'); if (c) c.remove();
-              running = false;
-            }, 380);
-          }
-        })();
-      }, 900);
+        if (!blinking) lids('open'); // speak with open eyes, always
+        wireAnalyser();
+        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+        voice.currentTime = 0;
+        stopMouth();
+        var p = voice.play();
+        startMouth();
+        if (p && p.catch) p.catch(function () { /* no gesture (gamepad-only): mouth runs on the fallback, silent */ });
+        voice.addEventListener('ended', function done() {
+          running = false; voice.removeEventListener('ended', done);
+        });
+      }, 700);
     }
-    function reset() {
-      stopTalking(); answer.innerHTML = ''; running = false;
-    }
-    window.__trigger = trigger; // websnap/testing hook
+    window.__trigger = function (instant) { if (instant) { lids('open'); } else trigger(); };
 
-    // — Inputs: any key, any tap/click, any gamepad button (8BitDo in
-    //   keyboard OR controller mode both land here).
+    // — Inputs: any key, any tap/click, any gamepad button.
     document.addEventListener('keydown', function (e) { if (!e.repeat) trigger(); });
     document.addEventListener('pointerdown', function () { trigger(); });
     var padWas = false;
