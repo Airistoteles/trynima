@@ -33,13 +33,13 @@
   /* The decorative board sketch — ink straight on the white. */
   .sketch{
     position:absolute; z-index:2;
-    left:4vw; top:50%; transform:translateY(-54%) rotate(-.3deg);
-    width:min(50vw, 760px);
+    right:5vw; top:50%; transform:translateY(-54%) rotate(.3deg);
+    width:min(46vw, 700px);
   }
   .sketch svg{display:block; width:100%; height:auto}
 
   .richard{
-    position:absolute; z-index:1; right:-2vw; bottom:0;
+    position:absolute; z-index:1; left:-2vw; bottom:0;
     width:min(74vh, 46vw);
     pointer-events:none; user-select:none;
   }
@@ -117,31 +117,35 @@
       <!-- Richard's board world as pure decoration: the line y = 2x + 3,
            its climb step, the crossing — math only, no words. -->
       <svg viewBox="0 0 640 430" fill="none">
-        <g stroke="#B9B1A2" stroke-width="2" stroke-linecap="round">
-          <path d="M 70 384 L 596 384" />
-          <path d="M 96 410 L 96 40" />
-          <path d="M 588 378 L 596 384 L 588 390" />
-          <path d="M 90 48 L 96 40 L 102 48" />
+        <!-- right triangle, ink -->
+        <g stroke="#211E18" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M 150 330 L 470 330 L 470 110 Z" />
         </g>
-        <g font-family="system-ui, sans-serif" font-size="21" fill="#6C6456" font-style="italic">
-          <text x="588" y="416">x</text>
-          <text x="64" y="46">y</text>
+        <!-- the right-angle mark -->
+        <path d="M 440 330 L 440 300 L 470 300" stroke="#6C6456" stroke-width="3" stroke-linecap="round" fill="none"/>
+        <!-- side squares, hinted: teal on a, amber on b -->
+        <g stroke="#0E7C67" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="2 10">
+          <path d="M 150 330 L 150 394 M 150 394 L 470 394 M 470 394 L 470 330" />
         </g>
-        <path d="M 118 372 C 240 268, 380 148, 560 4" stroke="#211E18" stroke-width="5" stroke-linecap="round"/>
-        <circle cx="96" cy="290" r="11" stroke="#DE7F35" stroke-width="4.5" fill="#FFFFFF"/>
-        <text x="30" y="297" font-family="system-ui, sans-serif" font-size="22" fill="#DE7F35">(0,3)</text>
-        <g stroke="#0E7C67" stroke-width="4.5" stroke-linecap="round">
-          <path d="M 230 262 L 306 262" stroke-dasharray="1 9"/>
-          <path d="M 306 262 L 306 196" />
-          <path d="M 300 204 L 306 196 L 312 204" />
+        <g stroke="#DE7F35" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="2 10">
+          <path d="M 470 110 L 534 110 M 534 110 L 534 330 M 534 330 L 470 330" />
         </g>
-        <text x="252" y="292" font-family="system-ui, sans-serif" font-size="21" fill="#0E7C67">1</text>
-        <text x="318" y="238" font-family="system-ui, sans-serif" font-size="21" fill="#0E7C67">2</text>
-        <g font-family="system-ui, sans-serif" font-size="40">
-          <text x="392" y="330" fill="#211E18">y = </text>
-          <text x="464" y="330" fill="#0E7C67" font-weight="700">2</text>
-          <text x="488" y="330" fill="#211E18">x + </text>
-          <text x="558" y="330" fill="#DE7F35" font-weight="700">3</text>
+        <!-- side labels -->
+        <g font-family="system-ui, sans-serif" font-size="30" font-style="italic">
+          <text x="300" y="368" fill="#0E7C67">a</text>
+          <text x="492" y="228" fill="#DE7F35">b</text>
+          <text x="272" y="208" fill="#211E18">c</text>
+        </g>
+        <!-- the law, color per symbol -->
+        <g font-family="system-ui, sans-serif" font-size="44">
+          <text x="120" y="96" fill="#0E7C67" font-style="italic">a</text>
+          <text x="146" y="78" fill="#0E7C67" font-size="28">2</text>
+          <text x="168" y="96" fill="#211E18"> + </text>
+          <text x="228" y="96" fill="#DE7F35" font-style="italic">b</text>
+          <text x="254" y="78" fill="#DE7F35" font-size="28">2</text>
+          <text x="276" y="96" fill="#211E18"> = </text>
+          <text x="340" y="96" fill="#211E18" font-style="italic">c</text>
+          <text x="364" y="78" fill="#211E18" font-size="28">2</text>
         </g>
       </svg>
     </div>
