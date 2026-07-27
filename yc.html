@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Nima</title>
 <meta name="robots" content="noindex" />
-<meta name="theme-color" content="#FFFFFF" />
+<meta name="theme-color" content="#EDE8DC" />
 <link rel="icon" type="image/png" href="favicon.png" />
 <style>
   /* YC-video page v3. Richard chilling, a purely decorative whiteboard
@@ -23,20 +23,12 @@
   *{box-sizing:border-box; margin:0}
   html,body{height:100%}
   body{
-    background:#FFFFFF; color:var(--ink);
+    background:#EDE8DC; color:var(--ink);
     font-family:system-ui,sans-serif;
     -webkit-font-smoothing:antialiased;
     overflow:hidden; cursor:none;
   }
   .stage{position:relative; height:100svh}
-
-  /* The decorative board sketch — ink straight on the white. */
-  .sketch{
-    position:absolute; z-index:2;
-    right:5vw; top:50%; transform:translateY(-54%) rotate(.3deg);
-    width:min(46vw, 700px);
-  }
-  .sketch svg{display:block; width:100%; height:auto}
 
   .richard{
     position:absolute; z-index:1; left:-2vw; bottom:0;
@@ -113,43 +105,6 @@
 </head>
 <body>
   <div class="stage" id="stage">
-    <div class="sketch" aria-hidden="true">
-      <!-- Richard's board world as pure decoration: the line y = 2x + 3,
-           its climb step, the crossing — math only, no words. -->
-      <svg viewBox="0 0 640 430" fill="none">
-        <!-- right triangle, ink -->
-        <g stroke="#211E18" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M 150 330 L 470 330 L 470 110 Z" />
-        </g>
-        <!-- the right-angle mark -->
-        <path d="M 440 330 L 440 300 L 470 300" stroke="#6C6456" stroke-width="3" stroke-linecap="round" fill="none"/>
-        <!-- side squares, hinted: teal on a, amber on b -->
-        <g stroke="#0E7C67" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="2 10">
-          <path d="M 150 330 L 150 394 M 150 394 L 470 394 M 470 394 L 470 330" />
-        </g>
-        <g stroke="#DE7F35" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="2 10">
-          <path d="M 470 110 L 534 110 M 534 110 L 534 330 M 534 330 L 470 330" />
-        </g>
-        <!-- side labels -->
-        <g font-family="system-ui, sans-serif" font-size="30" font-style="italic">
-          <text x="300" y="368" fill="#0E7C67">a</text>
-          <text x="492" y="228" fill="#DE7F35">b</text>
-          <text x="272" y="208" fill="#211E18">c</text>
-        </g>
-        <!-- the law, color per symbol -->
-        <g font-family="system-ui, sans-serif" font-size="44">
-          <text x="120" y="96" fill="#0E7C67" font-style="italic">a</text>
-          <text x="146" y="78" fill="#0E7C67" font-size="28">2</text>
-          <text x="168" y="96" fill="#211E18"> + </text>
-          <text x="228" y="96" fill="#DE7F35" font-style="italic">b</text>
-          <text x="254" y="78" fill="#DE7F35" font-size="28">2</text>
-          <text x="276" y="96" fill="#211E18"> = </text>
-          <text x="340" y="96" fill="#211E18" font-style="italic">c</text>
-          <text x="364" y="78" fill="#211E18" font-size="28">2</text>
-        </g>
-      </svg>
-    </div>
-
     <div class="richard" aria-hidden="true">
       <div class="breath">
         <div class="beat">
