@@ -29,22 +29,17 @@
   }
   .stage{position:relative; height:100svh}
 
+  /* The chalkboard, in RICHARD'S OWN language — flat fills + thick ink
+     outlines like the avatar art, nothing faux-real: no gradient wash, no
+     rounded UI corners, no floating tray. One slate, one attached ledge,
+     one chalk. */
   .boardprop{
     position:absolute; z-index:1;
-    left:5vw; top:50%; transform:translateY(-55%) rotate(-.5deg);
-    width:min(42vw, 680px); aspect-ratio:4/3;
-    background:radial-gradient(120% 120% at 30% 25%, #33403A 0%, #2A3630 55%, #242E29 100%);
-    border:10px solid #6E543C; border-radius:10px;
-    box-shadow:0 22px 60px rgba(0,0,0,.45), inset 0 0 40px rgba(0,0,0,.25);
+    left:5vw; top:50%; transform:translateY(-56%) rotate(-.4deg);
+    width:min(42vw, 680px);
+    filter:brightness(.92);
   }
-  .boardprop .tray{
-    position:absolute; left:10%; bottom:-30px; width:48%; height:13px;
-    background:#6E543C; border-radius:4px;
-  }
-  .boardprop .marker{
-    position:absolute; left:15%; bottom:-24px; width:56px; height:8px;
-    background:#EDE8DC; border-radius:4px; transform:rotate(-1deg);
-  }
+  .boardprop svg{display:block; width:100%; height:auto}
 
   .richard{
     position:absolute; z-index:1; right:0; bottom:-12vh;
@@ -125,7 +120,19 @@
 </head>
 <body>
   <div class="stage" id="stage">
-    <div class="boardprop" aria-hidden="true"><span class="tray"></span><span class="marker"></span></div>
+    <div class="boardprop" aria-hidden="true">
+      <svg viewBox="0 0 660 520" fill="none">
+        <!-- slate -->
+        <rect x="14" y="14" width="632" height="440" rx="6" fill="#2C3833" stroke="#1A1713" stroke-width="9"/>
+        <!-- inner hairline, like a worn frame edge -->
+        <rect x="34" y="34" width="592" height="400" rx="3" stroke="#242E2A" stroke-width="3"/>
+        <!-- attached ledge -->
+        <rect x="86" y="454" width="488" height="26" rx="6" fill="#38434F" stroke="#1A1713" stroke-width="7"/>
+        <!-- one chalk on the ledge -->
+        <rect x="150" y="443" width="74" height="15" rx="7" fill="#EDEAE2" stroke="#1A1713" stroke-width="5" transform="rotate(-1.2 187 450)"/>
+      </svg>
+    </div>
+
     <div class="richard" aria-hidden="true">
       <div class="breath">
         <div class="beat">
