@@ -33,6 +33,10 @@
     position:absolute; z-index:1; left:-2vw; bottom:0;
     width:min(74vh, 46vw);
     pointer-events:none; user-select:none;
+    /* Camera dim (Philip 2026-07-27): the art is too bright against the
+       dark stage on film. On the common parent so every patch keyframe
+       dims identically with the base. */
+    filter:brightness(.82) saturate(.95);
   }
   .breath{
     position:relative; transform-origin:50% 100%;
