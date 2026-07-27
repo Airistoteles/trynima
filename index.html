@@ -42,12 +42,39 @@
   a.founder .name{font-weight:600; font-size:15px; line-height:1.35}
   a.founder .link{color:var(--primary); font-size:13.5px; line-height:1.35; text-decoration:underline; text-underline-offset:3px}
   a.founder:hover .link{color:var(--text)}
+  form.try{display:flex; gap:8px; margin:20px 0 4px; flex-wrap:wrap}
+  form.try input[type=email]{
+    flex:1; min-width:200px; padding:10px 14px; font:inherit; color:var(--text);
+    border:1.5px solid #D8D2C6; border-radius:10px; background:#FFF; outline:none;
+  }
+  form.try input[type=email]:focus{border-color:var(--primary)}
+  form.try button{
+    padding:10px 18px; font:inherit; font-weight:600; color:#FFF;
+    background:var(--primary); border:none; border-radius:10px; cursor:pointer;
+  }
+  form.try button:hover{filter:brightness(1.08)}
+  .thanks{margin:20px 0 4px; color:var(--primary); font-weight:500}
 </style>
 </head>
 <body>
   <h1>Nima</h1>
   <p>We're building a <strong>true AI tutor for mathematics</strong>: one that understands what a student is working on, follows their reasoning, catches their mistakes, and guides them step by step.</p>
-  <p>From <strong>15 August</strong> you can try Nima in the App Store and Play Store. Want to try it before then? <a href="mailto:louis@airistoteles.nl">Reach out</a>.</p>
+  <p>From <strong>15 August</strong> you can try Nima in the App Store and Play Store. Want to try it before then? Leave your email and we'll get you in:</p>
+  <form class="try" id="tryform" action="https://formsubmit.co/philip@airistoteles.nl" method="POST">
+    <input type="hidden" name="_subject" value="Nima early access request (trynima.ai)" />
+    <input type="hidden" name="_captcha" value="false" />
+    <input type="hidden" name="_next" value="https://trynima.ai/?sent=1" />
+    <input type="email" name="email" required placeholder="you@example.com" aria-label="Your email" />
+    <button type="submit">Try Nima early</button>
+  </form>
+  <p class="muted thanks" id="thanks" hidden>Thanks — we'll reach out shortly to get you in.</p>
+  <script>
+    if (new URLSearchParams(location.search).get('sent') === '1') {
+      document.getElementById('tryform').hidden = true;
+      document.getElementById('thanks').hidden = false;
+      document.getElementById('thanks').scrollIntoView({block:'center'});
+    }
+  </script>
   <p class="muted">We previously built <a href="https://wiswiz.nl">WisWiz</a>, a maths tutoring app used by thousands of students across the Netherlands, featured in <a href="https://fd.nl/tech-en-innovatie/1588534/als-we-ook-menselijke-druk-in-de-app-kunnen-zetten-dan-zijn-we-klaar">Het Financieele Dagblad</a> and <a href="https://www.parool.nl/ps/bijles-in-je-broekzak-philip-20-en-stijn-21-ontwikkelden-een-wiskunde-app-voor-scholieren~b0f76f47/">Het Parool</a>.</p>
   <div class="founders">
     <a class="founder" href="https://www.linkedin.com/in/louis-vetter/">
