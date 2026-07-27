@@ -23,7 +23,7 @@
   *{box-sizing:border-box; margin:0}
   html,body{height:100%}
   body{
-    background:#FFFFFF; color:var(--ink);
+    background:#F5F2EA; color:var(--ink);
     font-family:"Ubuntu",system-ui,sans-serif;
     -webkit-font-smoothing:antialiased;
   }
@@ -37,7 +37,9 @@
      header in the label voice, 24/34 body. */
   .board{
     position:relative; z-index:2;
-    max-width:680px; padding:56px 26px 0;
+    max-width:640px; margin:44px 26px 0; padding:32px 30px 12px;
+    background:#FFFFFF; border:1.5px solid var(--hairline); border-radius:22px;
+    box-shadow:0 12px 32px rgba(74, 62, 38, .09);
   }
   .board h1{
     font-weight:500; font-size:13px; line-height:16px;
@@ -48,8 +50,8 @@
   .board p{font-size:24px; line-height:34px; font-weight:400; margin-bottom:22px}
   .board p strong{font-weight:700}
   .board .accent{color:var(--teal)}
-  .board a{color:var(--teal); text-decoration:none; border-bottom:1.5px solid var(--hairline)}
-  .board a:hover{border-color:var(--teal)}
+  a{color:var(--teal); text-decoration:none}
+  a:hover{color:var(--teal-pressed)}
 
   /* The early-access line: input as ink on the board, teal filled button. */
   form.try{display:flex; gap:10px; margin:2px 0 26px; flex-wrap:wrap; max-width:520px}
@@ -60,9 +62,6 @@
   }
   form.try input[type=email]::placeholder, form.try input[type=text]::placeholder{color:var(--muted); opacity:.7}
   form.try input[type=email]:focus, form.try input[type=text]:focus{border-color:var(--teal)}
-  form.contact{margin:8px 0 0}
-  form.contact input[type=text]{min-width:240px}
-  form.contact input[type=email]{min-width:170px}
   form.try button{
     padding:12px 22px; font:inherit; font-size:16.5px; font-weight:500;
     letter-spacing:.1px; color:#FFF; background:var(--teal);
@@ -74,11 +73,9 @@
   .small{font-size:15px; line-height:23px; color:var(--muted)}
   .small p{font:inherit; margin-bottom:10px}
   .founders{display:flex; gap:22px; margin:18px 0 14px; flex-wrap:wrap}
-  .founder{display:flex; align-items:center; gap:10px; color:var(--ink); text-decoration:none; border:none}
+  .founder{display:flex; align-items:center; gap:10px; color:var(--ink)}
   .founder img{width:44px; height:44px; border-radius:50%; display:block}
   .founder .name{font-weight:500; font-size:15px}
-  .founder .link{font-size:13.5px; color:var(--muted)}
-  .founder:hover .link{color:var(--teal)}
 
   /* RICHARD, chilling — bottom-pinned exactly like the session (the only cut
      is the screen's bottom edge). Breathing scales around the bottom so his
@@ -106,7 +103,7 @@
 
   .board-wrap{display:flex; flex-direction:column}
   .spacer{flex:1}
-  .small-board{padding-top:0}
+  .small-board{background:none; border:none; box-shadow:none; padding:18px 30px 26px; margin-top:0}
   /* Small screens: Richard gets his own bottom strip below the text — the
      board never runs over his face. He stays bottom-pinned inside it. */
   @media (max-width: 700px){
@@ -116,7 +113,7 @@
       position:relative; right:auto; bottom:auto;
       width:auto; height:44vh; margin-top:10px; flex:none;
     }
-    .small-board{padding-top:22px; padding-bottom:30px}
+    .small-board{padding:18px 22px 30px}
     .richard-inner{
       position:absolute; bottom:0; right:-6vw;
       width:min(38vh, 88vw);
@@ -132,12 +129,13 @@
         <div class="rule"></div>
         <p>A <strong>true AI tutor for mathematics</strong>: he sees what you're working on, follows your reasoning, catches your mistakes, and guides you step by step.</p>
         <p>From <strong class="accent">15 August</strong> you can try Nima in the App&nbsp;Store and Play&nbsp;Store.</p>
-        <p style="font-size:19px; line-height:27px; color:var(--muted); margin-bottom:14px">Want to try it before then? Leave your email — we'll get you in:</p>
+        <p style="font-size:19px; line-height:27px; color:var(--muted); margin-bottom:14px">Want in before then — or anything to ask us? Leave your email, a note if you like:</p>
         <form class="try" id="tryform" action="https://formsubmit.co/philip@airistoteles.nl" method="POST">
-          <input type="hidden" name="_subject" value="Nima early access request (trynima.ai)" />
+          <input type="hidden" name="_subject" value="Nima via trynima.ai" />
           <input type="hidden" name="_captcha" value="false" />
           <input type="hidden" name="_next" value="https://trynima.ai/?sent=1" />
           <input type="email" name="email" required placeholder="you@example.com" aria-label="Your email" />
+          <input type="text" name="message" placeholder="Your note (optional)" aria-label="Your note" />
           <button type="submit">Try Nima early</button>
         </form>
         <p class="thanks" id="thanks" hidden>Thanks — we'll reach out shortly to get you in.</p>
@@ -166,16 +164,6 @@
               <span><span class="name">Philip Pinckaers</span><br /><span class="link">LinkedIn</span></span>
             </a>
           </div>
-          <p id="contactlabel" style="margin-bottom:0">Get in touch:</p>
-          <form class="try contact" id="contactform" action="https://formsubmit.co/philip@airistoteles.nl" method="POST">
-            <input type="hidden" name="_subject" value="Message via trynima.ai (get in touch)" />
-            <input type="hidden" name="_captcha" value="false" />
-            <input type="hidden" name="_next" value="https://trynima.ai/?contacted=1" />
-            <input type="text" name="message" required placeholder="Your message" aria-label="Your message" />
-            <input type="email" name="email" required placeholder="you@example.com" aria-label="Your email" />
-            <button type="submit">Send</button>
-          </form>
-          <p class="thanks" id="contactthanks" hidden style="margin:8px 0 0">Thanks — your message is on its way.</p>
       </div>
     </div>
   </div>
@@ -185,11 +173,6 @@
     if (new URLSearchParams(location.search).get('sent') === '1') {
       document.getElementById('tryform').hidden = true;
       document.getElementById('thanks').hidden = false;
-    }
-    if (new URLSearchParams(location.search).get('contacted') === '1') {
-      document.getElementById('contactform').hidden = true;
-      document.getElementById('contactlabel').hidden = true;
-      document.getElementById('contactthanks').hidden = false;
     }
 
     // Richard's chilling animation, ported from the app's RichardAvatar:
