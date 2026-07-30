@@ -106,41 +106,24 @@
   .founder img{width:38px; height:38px; border-radius:50%; display:block}
   .founder .name{font-weight:500; font-size:14px}
 
-  /* The demo line: teal action written on the board; the player is a quiet
-     full-screen overlay with the native controls. */
-  .demo-line{margin:2px 0 14px}
-  .demo-link{
-    display:inline-flex; align-items:center; gap:9px;
-    font-size:19px; font-weight:500; color:var(--teal); cursor:pointer;
-    background:none; border:none; padding:0; font-family:inherit;
+  /* THE DEMO, embedded — a real player on the paper, top-left where the
+     eye lands first; the board carries the message beside it. */
+  .left{
+    display:flex; flex-direction:column; align-items:center;
+    justify-content:flex-start; flex:0 1 auto; min-width:0;
   }
-  .demo-link:hover{color:var(--teal-pressed)}
-  .demo-link .play{
-    width:34px; height:34px; border-radius:50%;
-    background:var(--teal); color:#FFF; flex:none;
-    display:inline-flex; align-items:center; justify-content:center;
+  .demo{
+    width:min(46vw, 620px); margin:7vh 2vw 0;
   }
-  .demo-link:hover .play{background:var(--teal-pressed)}
-  .demo-link .play svg{display:block; margin-left:2px}
-  .overlay{
-    position:fixed; inset:0; z-index:50;
-    background:rgba(23,21,17,0.88);
-    display:flex; align-items:center; justify-content:center;
-    padding:4vmin;
+  .demo video{
+    display:block; width:100%; aspect-ratio:16/9;
+    border-radius:14px; background:#000;
+    box-shadow:0 10px 32px rgba(33,30,24,0.18);
   }
-  .overlay[hidden]{display:none}
-  .overlay video{
-    max-width:100%; max-height:100%; width:min(1100px, 96vw);
-    border-radius:12px; background:#000;
-    box-shadow:0 12px 48px rgba(0,0,0,0.5);
+  .demo .cap{
+    font-size:14px; line-height:20px; color:var(--muted);
+    margin-top:8px; text-align:center;
   }
-  .overlay .close{
-    position:absolute; top:14px; right:18px;
-    font-size:34px; line-height:1; color:#FFF; opacity:.8;
-    background:none; border:none; cursor:pointer; padding:8px;
-    font-family:inherit;
-  }
-  .overlay .close:hover{opacity:1}
 
   .reveal{opacity:0; transform:translateY(4px); animation:reveal .2s ease-out forwards}
   @keyframes reveal{to{opacity:1; transform:none}}
@@ -151,7 +134,8 @@
      shirt stays sealed to the edge; blinks are hard keyframe cuts. */
   .richard{
     position:relative; z-index:1; right:-2vw; bottom:0; flex:none;
-    width:min(48vh, 88vw, 440px);
+    margin-top:auto;
+    width:min(44vh, 88vw, 420px);
     pointer-events:none; user-select:none;
   }
   .richard-inner{
@@ -182,8 +166,10 @@
     .board-body{padding:10px 24px 30px}
     .hero{font-size:22px; line-height:31px}
     .bl{font-size:17px; line-height:26px}
+    .left{order:2; align-items:stretch}
+    .demo{width:auto; margin:26px 18px 0}
     .richard{
-      order:2; align-self:flex-end; right:-6vw; margin-top:-30px;
+      align-self:flex-end; right:-6vw; margin-top:10px;
       width:min(38vh, 72vw);
     }
   }
@@ -191,11 +177,17 @@
 </head>
 <body>
   <div class="stage">
-    <div class="richard" aria-hidden="true">
-      <div class="richard-inner" id="richard">
-        <img src="richard.png" alt="" fetchpriority="high" />
-        <img class="lid" id="lidHalf" src="blink-half.png" alt="" />
-        <img class="lid" id="lidClosed" src="blink.png" alt="" />
+    <div class="left">
+      <div class="demo">
+        <video src="demo.mp4" poster="demo-poster.jpg" controls preload="metadata" playsinline></video>
+        <p class="cap">The demo (2:45)</p>
+      </div>
+      <div class="richard" aria-hidden="true">
+        <div class="richard-inner" id="richard">
+          <img src="richard.png" alt="" fetchpriority="high" />
+          <img class="lid" id="lidHalf" src="blink-half.png" alt="" />
+          <img class="lid" id="lidClosed" src="blink.png" alt="" />
+        </div>
       </div>
     </div>
 
@@ -205,12 +197,6 @@
         <p class="hero reveal d1">Nima is your learning companion, starting in mathematics.</p>
         <p class="bl reveal d2">It guides you through a learning session by speaking and listening to you, seeing your textbook and seeing your worked solutions.</p>
         <p class="bl reveal d3">From <strong>15 August</strong> in the App&nbsp;Store and Play&nbsp;Store.</p>
-        <p class="demo-line reveal d3">
-          <button class="demo-link" id="demoOpen" type="button">
-            <span class="play"><svg width="13" height="15" viewBox="0 0 13 15" fill="currentColor"><path d="M0 0 L13 7.5 L0 15 Z"/></svg></span>
-            Check the demo (2:45)
-          </button>
-        </p>
         <form class="try" id="tryform" action="https://formsubmit.co/philip@airistoteles.nl" method="POST">
           <input type="hidden" name="_subject" value="Nima via trynima.ai" />
           <input type="hidden" name="_captcha" value="false" />
@@ -238,35 +224,6 @@
     </div>
   </div>
 
-  <div class="overlay" id="demoOverlay" hidden>
-    <button class="close" id="demoClose" type="button" aria-label="Close">&times;</button>
-    <video id="demoVideo" src="demo.mp4" poster="demo-poster.jpg" controls preload="none" playsinline></video>
-  </div>
-
-  <script>
-    // The demo player: open the overlay, play; close pauses. Esc and the
-    // backdrop close it too.
-    (function () {
-      var overlay = document.getElementById('demoOverlay');
-      var video = document.getElementById('demoVideo');
-      document.getElementById('demoOpen').addEventListener('click', function () {
-        overlay.hidden = false;
-        var p = video.play();
-        if (p && p.catch) p.catch(function () {});
-      });
-      function close() {
-        overlay.hidden = true;
-        video.pause();
-      }
-      document.getElementById('demoClose').addEventListener('click', close);
-      overlay.addEventListener('click', function (e) {
-        if (e.target === overlay) close();
-      });
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && !overlay.hidden) close();
-      });
-    })();
-  </script>
   <script>
     // Early-access form: inline thanks state after the FormSubmit redirect.
     if (new URLSearchParams(location.search).get('sent') === '1') {
