@@ -99,6 +99,9 @@
   a{color:var(--teal); text-decoration:none}
   a:hover{color:var(--teal-pressed)}
 
+  /* THE FOUNDERS' NOTE — off the board, on the paper: top-left on wide
+     screens, balancing the plate; between the board and Richard on phones. */
+  .about{position:absolute; top:8vh; left:5vw; max-width:400px}
   .small{font-size:14px; line-height:21px; color:var(--muted)}
   .small p{font:inherit; margin-bottom:8px}
   .founders{display:flex; gap:14px; margin-top:14px; flex-wrap:wrap}
@@ -155,8 +158,9 @@
     .board-body{padding:10px 24px 30px}
     .hero{font-size:22px; line-height:31px}
     .bl{font-size:17px; line-height:26px}
+    .about{position:static; order:2; margin:26px 24px 0; max-width:none}
     .richard{
-      order:2; align-self:flex-end; right:-6vw; margin-top:-30px;
+      order:3; align-self:flex-end; right:-6vw; margin-top:-10px;
       width:min(38vh, 72vw);
     }
   }
@@ -191,21 +195,22 @@
           <button type="submit">Try Nima early</button>
         </form>
         <p class="thanks" id="thanks" hidden>Thanks! We'll reach out shortly to get you in.</p>
-        <div class="small">
-          <p>We both have years of tutoring experience and studied mathematics, which led us to found our previous startup WisWiz, a learning tool for mathematics with users in the Netherlands, featured in <a href="https://fd.nl/tech-en-innovatie/1588534/als-we-ook-menselijke-druk-in-de-app-kunnen-zetten-dan-zijn-we-klaar">Het Financieele Dagblad</a> and <a href="https://www.parool.nl/ps/bijles-in-je-broekzak-philip-20-en-stijn-21-ontwikkelden-een-wiskunde-app-voor-scholieren~b0f76f47/">Het Parool</a>.</p>
-          <div class="founders">
-            <div class="founder">
-              <img src="louis.png" alt="Louis Vetter" width="38" height="38" />
-              <span class="name">Louis Vetter</span>
-            </div>
-            <div class="founder">
-              <img src="philip.png" alt="Philip Pinckaers" width="38" height="38" />
-              <span class="name">Philip Pinckaers</span>
-            </div>
-          </div>
-        </div>
       </div>
       <div class="gloss"></div>
+    </div>
+
+    <div class="about small">
+      <p>We both have years of tutoring experience and studied mathematics, which led us to found our previous startup WisWiz, a learning tool for mathematics with users in the Netherlands, featured in the Dutch newspapers <a href="https://fd.nl/tech-en-innovatie/1588534/als-we-ook-menselijke-druk-in-de-app-kunnen-zetten-dan-zijn-we-klaar">Het Financieele Dagblad</a> and <a href="https://www.parool.nl/ps/bijles-in-je-broekzak-philip-20-en-stijn-21-ontwikkelden-een-wiskunde-app-voor-scholieren~b0f76f47/">Het Parool</a>.</p>
+      <div class="founders">
+        <div class="founder">
+          <img src="louis.png" alt="Louis Vetter" width="38" height="38" />
+          <span class="name">Louis Vetter</span>
+        </div>
+        <div class="founder">
+          <img src="philip.png" alt="Philip Pinckaers" width="38" height="38" />
+          <span class="name">Philip Pinckaers</span>
+        </div>
+      </div>
     </div>
   </div>
 
