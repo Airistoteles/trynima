@@ -7,7 +7,7 @@
 <meta name="description" content="Nima is your learning companion, starting in mathematics. From 15 August in the App Store and Play Store." />
 <meta property="og:title" content="Nima" />
 <meta property="og:description" content="Your learning companion, starting in mathematics. From 15 August in the App Store and Play Store." />
-<meta name="theme-color" content="#FFFFFF" />
+<meta name="theme-color" content="#E7F1EC" />
 <link rel="icon" type="image/png" href="favicon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -23,8 +23,10 @@
   }
   *{box-sizing:border-box; margin:0}
   html,body{height:100%}
+  /* The app's warm-study paper (tokens.ts: gradient #E7F1EC -> #F5F2EA) —
+     the white board plate sits on it exactly like the sheet in a session. */
   body{
-    background:#FFFFFF; color:var(--ink);
+    background:linear-gradient(#E7F1EC, #F5F2EA) fixed #F5F2EA; color:var(--ink);
     font-family:"Ubuntu",system-ui,sans-serif;
     -webkit-font-smoothing:antialiased;
   }
