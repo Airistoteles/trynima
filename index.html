@@ -22,7 +22,6 @@
     --board-ink:#1a1c21; --board-muted:rgba(26,28,33,0.55);
   }
   *{box-sizing:border-box; margin:0}
-  html{scroll-behavior:smooth}
   html,body{height:100%}
   /* The app's warm-study paper (tokens.ts: gradient #E7F1EC -> #F5F2EA) —
      the white board plate sits on it exactly like the sheet in a session. */
@@ -107,32 +106,12 @@
   .founder img{width:38px; height:38px; border-radius:50%; display:block}
   .founder .name{font-weight:500; font-size:14px}
 
-  /* The demo line on the board: a teal play line that glides down to the
-     player. */
-  .demo-line{margin:2px 0 14px}
-  .demo-link{
-    display:inline-flex; align-items:center; gap:9px;
-    font-size:19px; font-weight:500; color:var(--teal);
-  }
-  .demo-link:hover{color:var(--teal-pressed)}
-  .demo-link .play{
-    width:34px; height:34px; border-radius:50%;
-    background:var(--teal); color:#FFF; flex:none;
-    display:inline-flex; align-items:center; justify-content:center;
-  }
-  .demo-link:hover .play{background:var(--teal-pressed)}
-  .demo-link .play svg{display:block; margin-left:2px}
-
-  /* THE DEMO — its own screen below the scene: one big player, centered on
-     the paper. */
-  .demo-section{
-    min-height:100svh; display:flex; align-items:center; justify-content:center;
-    padding:7vh 4vw;
-  }
-  .demo-section video{
-    display:block; width:min(1040px, 92vw); aspect-ratio:16/9;
-    border-radius:16px; background:#000;
-    box-shadow:0 14px 44px rgba(33,30,24,0.22);
+  /* THE DEMO ON THE BOARD — a media block under the message, like the
+     board's own image blocks; the native controls carry the maximize. */
+  .board-demo{margin:6px 0 16px}
+  .board-demo video{
+    display:block; width:100%; aspect-ratio:16/9;
+    border-radius:12px; background:#000;
   }
 
   .reveal{opacity:0; transform:translateY(4px); animation:reveal .2s ease-out forwards}
@@ -179,8 +158,6 @@
       order:2; align-self:flex-end; right:-6vw; margin-top:-30px;
       width:min(38vh, 72vw);
     }
-    .demo-section{min-height:0; padding:6vh 0}
-    .demo-section video{width:100vw; border-radius:0}
   }
 </style>
 </head>
@@ -200,12 +177,9 @@
         <p class="hero reveal d1">Nima is your learning companion, starting in mathematics.</p>
         <p class="bl reveal d2">It guides you through a learning session by speaking and listening to you, seeing your textbook and seeing your worked solutions.</p>
         <p class="bl reveal d3">From <strong>15 August</strong> in the App&nbsp;Store and Play&nbsp;Store.</p>
-        <p class="demo-line reveal d3">
-          <a class="demo-link" href="#demo">
-            <span class="play"><svg width="13" height="15" viewBox="0 0 13 15" fill="currentColor"><path d="M0 0 L13 7.5 L0 15 Z"/></svg></span>
-            Check the demo (2:45)
-          </a>
-        </p>
+        <div class="board-demo reveal d3">
+          <video src="demo.mp4" poster="demo-poster.jpg" controls preload="metadata" playsinline></video>
+        </div>
         <form class="try" id="tryform" action="https://formsubmit.co/philip@airistoteles.nl" method="POST">
           <input type="hidden" name="_subject" value="Nima via trynima.ai" />
           <input type="hidden" name="_captcha" value="false" />
@@ -232,10 +206,6 @@
       <div class="gloss"></div>
     </div>
   </div>
-
-  <section class="demo-section" id="demo">
-    <video src="demo.mp4" poster="demo-poster.jpg" controls preload="metadata" playsinline></video>
-  </section>
 
   <script>
     // Early-access form: inline thanks state after the FormSubmit redirect.
