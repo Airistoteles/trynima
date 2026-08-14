@@ -4,9 +4,9 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Nima</title>
-<meta name="description" content="Nima is your learning companion, starting in mathematics. From 15 August in the App Store and Play Store." />
+<meta name="description" content="Nima is your learning companion, starting in mathematics. We are now beta testing with people." />
 <meta property="og:title" content="Nima" />
-<meta property="og:description" content="Your learning companion, starting in mathematics. From 15 August in the App Store and Play Store." />
+<meta property="og:description" content="Your learning companion, starting in mathematics. We are now beta testing with people." />
 <meta name="theme-color" content="#E7F1EC" />
 <link rel="icon" type="image/png" href="favicon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -37,14 +37,23 @@
     gap:0;
   }
 
+  /* HALF AND HALF (Philip, 2026-08-14: "links 50 nima animation, rechts 50
+     whiteboard"): the page is two equal columns. Richard owns the left half,
+     the board owns the right half, and each stands in the middle of its own
+     half — so neither side carries the empty space alone. */
+  .half{
+    flex:1 1 50%; min-width:0;
+    display:flex; align-items:flex-end; justify-content:center;
+  }
+
   /* THE WHITEBOARD — the app's board plate, verbatim (BoardSheet #185):
      white plate, top corners 18, drop shadow as the only separation, the
      grabber pill, and the panel light that makes it a glossy board instead
      of paper. The page's message IS what's written on it. */
   .sheet{
     position:relative; z-index:2;
-    width:min(640px, 58vw); min-height:66vh;
-    margin-right:-30px; margin-top:10vh;
+    width:min(640px, 100%); min-height:66vh;
+    margin-top:10vh;
     background:#FFFFFF;
     border-radius:18px 18px 0 0;
     box-shadow:0 -4px 14px rgba(0,0,0,0.14), 0 6px 24px rgba(0,0,0,0.10);
@@ -139,15 +148,18 @@
 
   /* RICHARD, chilling — bottom-pinned exactly like the session (the only cut
      is the screen's bottom edge). Breathing scales around the bottom so his
-     shirt stays sealed to the edge; blinks are hard keyframe cuts. */
+     shirt stays sealed to the edge; blinks are hard keyframe cuts.
+     No z-index: the sheet (z-index 2) still paints over him, and Richard's
+     box stays un-isolated so the wave below can blend with the page paper. */
   .richard{
-    position:relative; z-index:1; right:-2vw; bottom:0; flex:none;
+    position:relative; bottom:0; flex:none;
     width:min(48vh, 88vw, 440px);
     pointer-events:none; user-select:none;
   }
   .richard-inner{
     position:relative; transform-origin:50% 100%;
     animation:breath 6.4s ease-in-out infinite;
+    transition:opacity .22s linear;
   }
   .richard img{display:block; width:100%; height:auto}
   .richard .lid{
@@ -157,6 +169,24 @@
   @keyframes breath{
     0%,100%{transform:scale(1)} 50%{transform:scale(1.007)}
   }
+
+  /* THE FIRST-VISIT WAVE — Nima Animation's export dist/wave-v1, clip
+     "greet-wave": 5s, silent, 720x1280, and its first frame IS the canonical
+     rest still, so the swap with richard.png is a swap between two pictures
+     of the same pose. Bottom-pinned on the same width as the still, so his
+     feet-line matches and the extra height is only headroom for the hand.
+     The export carries its own light backdrop; `darken` keeps the page's
+     paper as the paper and lets through only Richard's own, darker ink.
+     The two pictures trade places over 0.22s, so the breath — which the still
+     has and the clip does not — can never show as a jump. */
+  .wave{
+    position:absolute; left:0; bottom:0; width:100%; height:auto;
+    opacity:0; pointer-events:none; mix-blend-mode:darken;
+    transition:opacity .22s linear;
+  }
+  .waving .wave{opacity:1}
+  .waving .richard-inner{opacity:0}
+
   @media (prefers-reduced-motion: reduce){
     .richard-inner{animation:none}
     .reveal{animation-duration:0s; animation-delay:0s}
@@ -166,7 +196,12 @@
   /* Small screens: the sheet spans from the left edge like the app's sheet;
      Richard stands behind its right side, head above the plate. */
   @media (max-width: 900px){
+    /* One column on a phone: there are no halves to divide, so each half
+       becomes a full-width row and the board comes first, as before. */
     .stage{flex-direction:column; align-items:stretch; justify-content:flex-start}
+    .half{flex:0 0 auto; width:100%}
+    .half-board{order:1}
+    .half-richard{order:3; justify-content:flex-end; margin-top:-10px}
     .sheet{
       width:auto; min-height:0; margin:5vh 0 0; align-self:stretch;
     }
@@ -175,7 +210,7 @@
     .hero{font-size:22px; line-height:31px}
     .bl{font-size:17px; line-height:26px}
     .richard{
-      order:3; align-self:flex-end; right:-6vw; margin-top:-10px;
+      right:-6vw;
       width:min(38vh, 72vw);
     }
   }
@@ -183,14 +218,18 @@
 </head>
 <body>
   <div class="stage">
+    <div class="half half-richard">
     <div class="richard" aria-hidden="true">
       <div class="richard-inner" id="richard">
         <img src="richard.png" alt="" fetchpriority="high" />
         <img class="lid" id="lidHalf" src="blink-half.png" alt="" />
         <img class="lid" id="lidClosed" src="blink.png" alt="" />
       </div>
+      <video class="wave" id="wave" muted playsinline preload="none" disablepictureinpicture></video>
+    </div>
     </div>
 
+    <div class="half half-board">
     <div class="sheet">
       <div class="grabber-zone"><div class="grabber"></div></div>
       <nav class="board-tabs" role="tablist" aria-label="Board sections">
@@ -201,11 +240,11 @@
       <div class="board-body" id="panel-nima" role="tabpanel" aria-labelledby="tab-nima">
         <p class="hero reveal d1">Nima is your learning companion, starting in mathematics.</p>
         <p class="bl reveal d2">Nima guides you through a learning session by speaking and listening to you, seeing your textbook and seeing your worked solutions.</p>
-        <p class="bl reveal d3">From <strong>15 August</strong> in the App&nbsp;Store and Play&nbsp;Store.</p>
         <p class="bl demo-intro reveal d3">Here is a demo of a session:</p>
         <div class="board-demo reveal d3">
           <video src="demo.mp4" poster="demo-poster.jpg" controls preload="metadata" playsinline></video>
         </div>
+        <p class="bl reveal d3">We are now beta testing Nima with people. Do you want to test it too? <a href="https://testflight.apple.com/join/uFDDHcCd">Get Nima on TestFlight</a>.</p>
         <form class="try" id="tryform" action="https://formsubmit.co/philip@airistoteles.nl" method="POST">
           <input type="hidden" name="_subject" value="Nima via trynima.ai" />
           <input type="hidden" name="_captcha" value="false" />
@@ -231,6 +270,7 @@
       </div>
       </div>
       <div class="gloss"></div>
+    </div>
     </div>
   </div>
 
@@ -293,6 +333,43 @@
       }
       setTimeout(blink, 700);
       schedule();
+    })();
+
+    // THE FIRST VISIT: Richard waves once, and never again on this device.
+    // The still is the page; the wave is an overlay that exists only while it
+    // plays. So a refused autoplay leaves exactly today's page — nothing to
+    // hide and nothing to undo. The clip is silent and ends on the rest pose.
+    // He waves when he is ON SCREEN, not when the page loads: on a phone he
+    // stands well below the fold, and a wave nobody can see is a wave spent.
+    (function () {
+      var box = document.querySelector('.richard');
+      var wave = document.getElementById('wave');
+      var seen;
+      try { seen = localStorage.getItem('nima_waved'); } catch (e) { seen = null; }
+      if (seen) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      function greet() {
+        try { localStorage.setItem('nima_waved', '1'); } catch (e) {}
+        wave.addEventListener('playing', function () { box.classList.add('waving'); });
+        wave.addEventListener('ended', function () { box.classList.remove('waving'); });
+        wave.src = 'wave.mp4';
+        var p = wave.play();
+        // A browser may refuse to start it. Then the still simply stays.
+        if (p && p.catch) p.catch(function () {});
+      }
+
+      window.addEventListener('load', function () {
+        // The page is on screen first; the 1 MB clip loads after it.
+        setTimeout(function () {
+          var watch = new IntersectionObserver(function (entries) {
+            if (!entries[0].isIntersecting) return;
+            watch.disconnect();
+            greet();
+          }, { threshold: 0.4 });
+          watch.observe(box);
+        }, 400);
+      });
     })();
   </script>
 </body>
