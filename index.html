@@ -54,6 +54,10 @@
     flex:1 1 50%; min-width:0;
     display:flex; align-items:flex-end; justify-content:center;
   }
+  /* ROOM FOR THE RAISED HAND: the wave reaches 21% of Richard's width past
+     his right edge. His half keeps that much free on the right, so the hand
+     never runs into the board — on a wide screen and on a narrow one. */
+  .half-richard{padding-right:calc(min(48vh, 88vw, 440px) * 0.22)}
 
   /* THE WHITEBOARD — the app's board plate, verbatim (BoardSheet #185):
      white plate, top corners 18, drop shadow as the only separation, the
@@ -173,7 +177,9 @@
     animation:breath 6.4s ease-in-out infinite;
     transition:opacity .22s linear;
   }
-  .richard img{display:block; width:100%; height:auto}
+  /* Scoped to the still (.richard-inner), never to the wave: `.richard img`
+     would outrank `.wave` on specificity and silently undo its geometry. */
+  .richard-inner img{display:block; width:100%; height:auto}
   .richard .lid{
     position:absolute; left:29.297%; top:38.086%; width:41.992%;
     opacity:0;
@@ -182,22 +188,28 @@
     0%,100%{transform:scale(1)} 50%{transform:scale(1.007)}
   }
 
-  /* THE FIRST-VISIT WAVE — Nima Animation's export dist/wave-v1, clip
-     "greet-wave": 5s, silent, 720x1280, and its first frame IS the canonical
-     rest still, so the swap with richard.png is a swap between two pictures
-     of the same pose. Bottom-pinned on the same width as the still, so his
-     feet-line matches and the extra height is only headroom for the hand.
-     The export ships a cool light-grey backdrop; this copy is keyed to a
-     warm off-white (#FAF7F1, decodes to 249,245,239) that is lighter than
-     the paper in EVERY channel at both ends of the gradient. `darken` then
-     leaves the paper exactly the paper and lets through only Richard's own,
-     darker ink — and if a browser ever refuses the blend, what shows is a
-     near-paper tone instead of a grey plate. The paper it blends with is
-     .stage's background — see the note there.
-     The two pictures trade places over 0.22s, so the breath — which the still
-     has and the clip does not — can never show as a jump. */
+  /* THE FIRST-VISIT WAVE — Nima Animation's greet-wave, from the WIDE render
+     (zwaai-breed, 1080x1280) instead of the 720-wide one that dist/wave-v1
+     ships. The narrow render cuts the raised hand at the frame edge for
+     ~70 of its 121 frames (Philip, 2026-08-14, with a screenshot). The wide
+     render is the same take on a wider canvas: its character sits exactly
+     184px to the right, so `left:-25.5556%; width:150%` puts Richard on the
+     very same spot as the still and spends the extra canvas on his hand.
+     Three frames (82-84) where the hand still left even that canvas are
+     dropped, at the slow top of the swing — 118 frames, 4.92s.
+     Its backdrop is keyed to a warm off-white (249,246,240) that is lighter
+     than the paper in EVERY channel at both ends of the gradient. `darken`
+     then leaves the paper exactly the paper and lets through only Richard's
+     own, darker ink — and if a browser ever refuses the blend, what shows is
+     a near-paper tone, never a grey plate. The paper it blends with is
+     .stage's background — see the note there. The file name carries the
+     version, so no cache can ever serve the old grey-backdrop clip.
+     The first frame IS the canonical rest still, so the swap with
+     richard.png is a swap between two pictures of the same pose; they trade
+     places over 0.22s, so the breath — which the still has and the clip does
+     not — can never show as a jump. */
   .wave{
-    position:absolute; left:0; bottom:0; width:100%; height:auto;
+    position:absolute; left:-25.5556%; bottom:0; width:150%; height:auto;
     opacity:0; pointer-events:none; mix-blend-mode:darken;
     transition:opacity .22s linear;
   }
@@ -226,8 +238,12 @@
     .board-tabs{padding:6px 26px 0; gap:20px}
     .hero{font-size:22px; line-height:31px}
     .bl{font-size:17px; line-height:26px}
+    /* On a phone he stood half off the right edge, which left the raised
+       hand nowhere to go. He now stands one quarter of his width further
+       left, so the whole wave is on the screen. */
+    .half-richard{padding-right:0}
     .richard{
-      right:-6vw;
+      right:calc(min(38vh, 72vw) * 0.25);
       width:min(38vh, 72vw);
     }
   }
@@ -372,7 +388,7 @@
         try { localStorage.setItem('nima_waved', '1'); } catch (e) {}
         wave.addEventListener('playing', function () { box.classList.add('waving'); });
         wave.addEventListener('ended', function () { box.classList.remove('waving'); });
-        wave.src = 'wave.mp4';
+        wave.src = 'wave-2.mp4';
         var p = wave.play();
         // A browser may refuse to start it. Then the still simply stays.
         if (p && p.catch) p.catch(function () {});
