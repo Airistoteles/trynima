@@ -24,15 +24,24 @@
   *{box-sizing:border-box; margin:0}
   html,body{height:100%}
   /* The app's warm-study paper (tokens.ts: gradient #E7F1EC -> #F5F2EA) —
-     the white board plate sits on it exactly like the sheet in a session. */
+     the white board plate sits on it exactly like the sheet in a session.
+     THE PAPER IS PAINTED BY .stage, NOT BY body (Philip, 2026-08-14: during
+     the wave the paper was another colour). A background on body is
+     propagated to the page canvas, and a canvas background is NOT part of
+     the page's blending group: Richard's wave clip, which blends with
+     `darken`, then had nothing to blend with and painted its own light-grey
+     backdrop as a rectangle. An ordinary element background blends
+     everywhere, so the paper moves onto the stage and body keeps only the
+     flat end colour for overscroll. */
   body{
-    background:linear-gradient(#E7F1EC, #F5F2EA) fixed #F5F2EA; color:var(--ink);
+    background:#F5F2EA; color:var(--ink);
     font-family:"Ubuntu",system-ui,sans-serif;
     -webkit-font-smoothing:antialiased;
   }
 
   .stage{
     position:relative; min-height:100svh; overflow:hidden;
+    background:linear-gradient(#E7F1EC, #F5F2EA);
     display:flex; align-items:flex-end; justify-content:center;
     gap:0;
   }
@@ -52,8 +61,8 @@
      of paper. The page's message IS what's written on it. */
   .sheet{
     position:relative; z-index:2;
-    width:min(640px, 100%); min-height:66vh;
-    margin-top:10vh;
+    width:min(640px, 100%); min-height:60vh;
+    margin-top:8vh;
     background:#FFFFFF;
     border-radius:18px 18px 0 0;
     box-shadow:0 -4px 14px rgba(0,0,0,0.14), 0 6px 24px rgba(0,0,0,0.10);
@@ -85,9 +94,9 @@
 
   /* The writing on the board: the app's board type — a muted lowercase
      header over a hairline, then ink. */
-  .board-body{position:relative; padding:30px 44px 48px}
-  .hero{font-size:26px; line-height:36px; font-weight:700; color:var(--board-ink); margin-bottom:20px; text-wrap:balance}
-  .bl{font-size:19px; line-height:28px; color:var(--board-ink); margin-bottom:16px}
+  .board-body{position:relative; padding:26px 44px 34px}
+  .hero{font-size:26px; line-height:36px; font-weight:700; color:var(--board-ink); margin-bottom:16px; text-wrap:balance}
+  .bl{font-size:19px; line-height:28px; color:var(--board-ink); margin-bottom:14px}
 
   form.try{display:flex; gap:12px; margin:0; flex-wrap:wrap}
   form.try input[type=email], form.try input[type=text]{
@@ -134,11 +143,14 @@
   .founder .name{font-weight:500; font-size:15px}
 
   /* THE DEMO ON THE BOARD — a media block under the message, like the
-     board's own image blocks; the native controls carry the maximize. */
-  .demo-intro{margin:42px 0 14px}
-  .board-demo{margin:0 0 38px}
+     board's own image blocks; the native controls carry the maximize.
+     The player is capped at 400px (Philip, 2026-08-14: "maybe video
+     smaller?") so the board stays short enough for one screen; the native
+     controls still open it full size. */
+  .demo-intro{margin:26px 0 12px}
+  .board-demo{margin:0 0 26px}
   .board-demo video{
-    display:block; width:100%; aspect-ratio:16/9;
+    display:block; width:min(100%, 400px); aspect-ratio:16/9;
     border-radius:12px; background:#000;
   }
 
@@ -175,8 +187,13 @@
      rest still, so the swap with richard.png is a swap between two pictures
      of the same pose. Bottom-pinned on the same width as the still, so his
      feet-line matches and the extra height is only headroom for the hand.
-     The export carries its own light backdrop; `darken` keeps the page's
-     paper as the paper and lets through only Richard's own, darker ink.
+     The export ships a cool light-grey backdrop; this copy is keyed to a
+     warm off-white (#FAF7F1, decodes to 249,245,239) that is lighter than
+     the paper in EVERY channel at both ends of the gradient. `darken` then
+     leaves the paper exactly the paper and lets through only Richard's own,
+     darker ink — and if a browser ever refuses the blend, what shows is a
+     near-paper tone instead of a grey plate. The paper it blends with is
+     .stage's background — see the note there.
      The two pictures trade places over 0.22s, so the breath — which the still
      has and the clip does not — can never show as a jump. */
   .wave{
@@ -205,7 +222,7 @@
     .sheet{
       width:auto; min-height:0; margin:5vh 0 0; align-self:stretch;
     }
-    .board-body{padding:16px 26px 42px}
+    .board-body{padding:16px 26px 32px}
     .board-tabs{padding:6px 26px 0; gap:20px}
     .hero{font-size:22px; line-height:31px}
     .bl{font-size:17px; line-height:26px}
@@ -344,9 +361,11 @@
     (function () {
       var box = document.querySelector('.richard');
       var wave = document.getElementById('wave');
+      // trynima.ai/?wave plays it again — the one way to see the wave twice.
+      var again = new URLSearchParams(location.search).has('wave');
       var seen;
       try { seen = localStorage.getItem('nima_waved'); } catch (e) { seen = null; }
-      if (seen) return;
+      if (seen && !again) return;
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
       function greet() {
