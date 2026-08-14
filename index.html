@@ -23,16 +23,22 @@
   }
   *{box-sizing:border-box; margin:0}
   html,body{height:100%}
+  /* RICHARD'S FRAME. The animation bundle (nima-animation dist/wave-web-v1)
+     draws Richard on a 1064x1280 frame with a real alpha channel. Both the
+     still and the wave are that same frame, so they need one shared width.
+     --plate is the old design width of Richard on this page; --frame is the
+     frame that holds that same Richard at that same size:
+       still on screen  = --plate * 642/720   (richard.png's own silhouette)
+       frame on screen  = --frame * 654/1064
+     and 1.4371 is the factor that makes the two equal, measured by fitting
+     the delivered rest.png onto the page's old still (best fit around the
+     face: scale 0.9725, so 1064/720 * 0.9725 = 1.4371). Richard therefore
+     keeps exactly the size and the place he had before this change. */
+  :root{ --plate:min(48vh, 88vw, 440px); --frame:calc(var(--plate) * 1.4371) }
   /* The app's warm-study paper (tokens.ts: gradient #E7F1EC -> #F5F2EA) —
      the white board plate sits on it exactly like the sheet in a session.
-     THE PAPER IS PAINTED BY .stage, NOT BY body (Philip, 2026-08-14: during
-     the wave the paper was another colour). A background on body is
-     propagated to the page canvas, and a canvas background is NOT part of
-     the page's blending group: Richard's wave clip, which blends with
-     `darken`, then had nothing to blend with and painted its own light-grey
-     backdrop as a rectangle. An ordinary element background blends
-     everywhere, so the paper moves onto the stage and body keeps only the
-     flat end colour for overscroll. */
+     The paper is painted by .stage; body carries only the flat end colour,
+     for overscroll. */
   body{
     background:#F5F2EA; color:var(--ink);
     font-family:"Ubuntu",system-ui,sans-serif;
@@ -54,10 +60,11 @@
     flex:1 1 50%; min-width:0;
     display:flex; align-items:flex-end; justify-content:center;
   }
-  /* ROOM FOR THE RAISED HAND: the wave reaches 21% of Richard's width past
-     his right edge. His half keeps that much free on the right, so the hand
-     never runs into the board — on a wide screen and on a narrow one. */
-  .half-richard{padding-right:calc(min(48vh, 88vw, 440px) * 0.22)}
+  /* ROOM FOR THE RAISED HAND: the raised hand lives inside the 1064-wide
+     frame, and the frame is wider than Richard. This padding keeps the frame
+     standing where the old still stood, so Richard does not walk towards the
+     board. Measured: it holds his centre within 2.4px of its old place. */
+  .half-richard{padding-right:calc(var(--plate) * 0.22)}
 
   /* THE WHITEBOARD — the app's board plate, verbatim (BoardSheet #185):
      white plate, top corners 18, drop shadow as the only separation, the
@@ -165,52 +172,56 @@
   /* RICHARD, chilling — bottom-pinned exactly like the session (the only cut
      is the screen's bottom edge). Breathing scales around the bottom so his
      shirt stays sealed to the edge; blinks are hard keyframe cuts.
-     No z-index: the sheet (z-index 2) still paints over him, and Richard's
-     box stays un-isolated so the wave below can blend with the page paper. */
+     No z-index: the sheet (z-index 2) still paints over him.
+     The box keeps the height it always had (--plate * 1.5) and clips the
+     empty top of the taller frame, so the page is not one pixel longer than
+     before — that matters on a phone, where Richard is a row of his own. */
   .richard{
     position:relative; bottom:0; flex:none;
-    width:min(48vh, 88vw, 440px);
+    width:var(--frame); height:calc(var(--plate) * 1.5); overflow:hidden;
     pointer-events:none; user-select:none;
   }
   .richard-inner{
-    position:relative; transform-origin:50% 100%;
+    position:absolute; left:0; bottom:0; width:100%;
+    transform-origin:50% 100%;
     animation:breath 6.4s ease-in-out infinite;
     transition:opacity .22s linear;
   }
   /* Scoped to the still (.richard-inner), never to the wave: `.richard img`
      would outrank `.wave` on specificity and silently undo its geometry. */
   .richard-inner img{display:block; width:100%; height:auto}
+  /* The eye patches were drawn on the old 720x1080 still. On the 1064x1280
+     frame they sit here: measured by matching the old still's eye band onto
+     rest.png (scale 0.9725, dx -155.0, dy -188.5), which maps the old box
+     x 211 y 411 w 302 to x 376.3 y 616.8 w 310.9 of 1064x1280. */
   .richard .lid{
-    position:absolute; left:29.297%; top:38.086%; width:41.992%;
+    position:absolute; left:35.366%; top:48.187%; width:29.219%;
     opacity:0;
   }
   @keyframes breath{
     0%,100%{transform:scale(1)} 50%{transform:scale(1.007)}
   }
 
-  /* THE FIRST-VISIT WAVE — Nima Animation's greet-wave, from the WIDE render
-     (zwaai-breed, 1080x1280) instead of the 720-wide one that dist/wave-v1
-     ships. The narrow render cuts the raised hand at the frame edge for
-     ~70 of its 121 frames (Philip, 2026-08-14, with a screenshot). The wide
-     render is the same take on a wider canvas: its character sits exactly
-     184px to the right, so `left:-25.5556%; width:150%` puts Richard on the
-     very same spot as the still and spends the extra canvas on his hand.
-     Three frames (82-84) where the hand still left even that canvas are
-     dropped, at the slow top of the swing — 118 frames, 4.92s.
-     Its backdrop is keyed to a warm off-white (249,246,240) that is lighter
-     than the paper in EVERY channel at both ends of the gradient. `darken`
-     then leaves the paper exactly the paper and lets through only Richard's
-     own, darker ink — and if a browser ever refuses the blend, what shows is
-     a near-paper tone, never a grey plate. The paper it blends with is
-     .stage's background — see the note there. The file name carries the
-     version, so no cache can ever serve the old grey-backdrop clip.
-     The first frame IS the canonical rest still, so the swap with
-     richard.png is a swap between two pictures of the same pose; they trade
-     places over 0.22s, so the breath — which the still has and the clip does
-     not — can never show as a jump. */
+  /* THE FIRST-VISIT WAVE — Nima Animation's web bundle dist/wave-web-v1
+     (their card 28), 1064x1280, 242 frames at 48fps = 5.042s, silent.
+     TWO SOURCES: VP9/WebM with a real alpha channel for Chrome, Firefox and
+     Edge, and HEVC-alpha in the Apple form for Safari. The browser takes the
+     first one it can play, so Safari falls through to the .mov.
+     NO BLEND MODE, NO FILTER, NO BACKGROUND. Those existed only to hide a
+     clip that had no transparency and carried its own plate; that plate is
+     what drew the hard line across the page. This clip has real alpha, so
+     the page shines through everywhere Richard is not, and a darken blend
+     would now darken Richard himself.
+     The frame is the same frame as the still (rest.png is its first frame),
+     so `left:0; width:100%` puts the wave exactly on the still — no shift to
+     compute and nothing to drift. They trade places over 0.22s, so the
+     breath, which the still has and the clip does not, cannot show as a jump.
+     aspect-ratio holds the geometry before the metadata arrives, because
+     preload="none" means the clip is fetched only when he comes into view. */
   .wave{
-    position:absolute; left:-25.5556%; bottom:0; width:150%; height:auto;
-    opacity:0; pointer-events:none; mix-blend-mode:darken;
+    position:absolute; left:0; bottom:0; width:100%; height:auto;
+    aspect-ratio:1064 / 1280;
+    opacity:0; pointer-events:none;
     transition:opacity .22s linear;
   }
   .waving .wave{opacity:1}
@@ -227,6 +238,7 @@
   @media (max-width: 900px){
     /* One column on a phone: there are no halves to divide, so each half
        becomes a full-width row and the board comes first, as before. */
+    :root{ --plate:min(38vh, 72vw) }
     .stage{flex-direction:column; align-items:stretch; justify-content:flex-start}
     .half{flex:0 0 auto; width:100%}
     .half-board{order:1}
@@ -238,14 +250,16 @@
     .board-tabs{padding:6px 26px 0; gap:20px}
     .hero{font-size:22px; line-height:31px}
     .bl{font-size:17px; line-height:26px}
-    /* On a phone he stood half off the right edge, which left the raised
-       hand nowhere to go. He now stands one quarter of his width further
-       left, so the whole wave is on the screen. */
+    /* On a phone the frame stands against the right edge, shifted left by
+       this much. Derived the same way as the desktop padding: it puts
+       Richard's centre on the exact place he had before the frame changed
+       (he used to be a 720-wide plate shifted left by a quarter of itself).
+       The frame is wider than the screen, but only its transparent edges
+       fall outside: measured at 390x844 his silhouette starts at 14% of the
+       screen and the frame's right edge, where the raised hand reaches,
+       stays on the screen. */
     .half-richard{padding-right:0}
-    .richard{
-      right:calc(min(38vh, 72vw) * 0.25);
-      width:min(38vh, 72vw);
-    }
+    .richard{ right:calc(var(--plate) * 0.026) }
   }
 </style>
 </head>
@@ -254,11 +268,14 @@
     <div class="half half-richard">
     <div class="richard" aria-hidden="true">
       <div class="richard-inner" id="richard">
-        <img src="richard.png" alt="" fetchpriority="high" />
+        <img src="rest.png" alt="" width="1064" height="1280" fetchpriority="high" />
         <img class="lid" id="lidHalf" src="blink-half.png" alt="" />
         <img class="lid" id="lidClosed" src="blink.png" alt="" />
       </div>
-      <video class="wave" id="wave" muted playsinline preload="none" disablepictureinpicture></video>
+      <video class="wave" id="wave" muted playsinline preload="none" disablepictureinpicture>
+        <source src="wave.webm" type="video/webm" />
+        <source src="wave.mov" type='video/quicktime; codecs="hvc1"' />
+      </video>
     </div>
     </div>
 
@@ -388,14 +405,15 @@
         try { localStorage.setItem('nima_waved', '1'); } catch (e) {}
         wave.addEventListener('playing', function () { box.classList.add('waving'); });
         wave.addEventListener('ended', function () { box.classList.remove('waving'); });
-        wave.src = 'wave-2.mp4';
+        // The sources stand in the HTML; preload="none" holds the fetch back
+        // until here, so the page is on screen before the clip is asked for.
         var p = wave.play();
         // A browser may refuse to start it. Then the still simply stays.
         if (p && p.catch) p.catch(function () {});
       }
 
       window.addEventListener('load', function () {
-        // The page is on screen first; the 1 MB clip loads after it.
+        // The page is on screen first; the 2.4 MB clip loads after it.
         setTimeout(function () {
           var watch = new IntersectionObserver(function (entries) {
             if (!entries[0].isIntersecting) return;
