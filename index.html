@@ -110,6 +110,13 @@
   .board-tabs button:hover{color:var(--board-ink)}
   .board-tabs button[aria-selected="true"]{color:var(--teal); border-bottom-color:var(--teal)}
 
+  /* ONE PLATE, ONE SIZE (Philip: the whiteboard stays the same size when
+     switching): both panels share the same grid cell, so the plate is always
+     as tall as the taller one — the hidden panel keeps its space, invisible. */
+  .board-panels{display:grid}
+  .board-panels > .board-body{grid-area:1/1}
+  .board-panels > .board-body[hidden]{display:block; visibility:hidden; pointer-events:none}
+
   /* THE FOUNDERS' NOTE — on the board, under the About Us choice. */
   .about p{font-size:16px; line-height:25px; color:var(--board-ink); margin-bottom:12px}
   .founders{display:flex; gap:18px; margin-top:20px; flex-wrap:wrap}
@@ -190,6 +197,7 @@
         <button type="button" role="tab" id="tab-nima" aria-controls="panel-nima" aria-selected="true">Nima</button>
         <button type="button" role="tab" id="tab-about" aria-controls="panel-about" aria-selected="false">About Us</button>
       </nav>
+      <div class="board-panels">
       <div class="board-body" id="panel-nima" role="tabpanel" aria-labelledby="tab-nima">
         <p class="hero reveal d1">Nima is your learning companion, starting in mathematics.</p>
         <p class="bl reveal d2">Nima guides you through a learning session by speaking and listening to you, seeing your textbook and seeing your worked solutions.</p>
@@ -221,13 +229,18 @@
           </div>
         </div>
       </div>
+      </div>
       <div class="gloss"></div>
     </div>
   </div>
 
   <noscript>
     <!-- No script, no toolbar: both sections simply stand on the board. -->
-    <style>.board-tabs{display:none} #panel-about[hidden]{display:block}</style>
+    <style>
+      .board-tabs{display:none}
+      .board-panels{display:block}
+      .board-panels > .board-body[hidden]{display:block; visibility:visible; pointer-events:auto}
+    </style>
   </noscript>
   <script>
     // The board toolbar: two choices, one panel on the board at a time.
