@@ -46,55 +46,63 @@
 </head>
 <body>
   <h1>Privacy Policy</h1>
-  <p class="updated">Nima &middot; Last updated 8 August 2026</p>
+  <p class="updated">Nima &middot; Last updated 10 September 2026</p>
 
-  <p>Nima is an AI maths tutor for secondary-school students, made by <strong>Airistoteles</strong>. Nima is currently a <strong>closed beta</strong>, distributed to a small group of invited testers through TestFlight. This policy describes what the app records, who processes it, and how to have it deleted. It is written to describe what the software actually does today, not what we intend it to do later.</p>
+  <p>Nima is an AI maths tutor for secondary-school students, made by <strong>Airistoteles</strong>. This policy describes what the app records, who processes it, how long we keep it, and how you delete it. It describes what the software actually does.</p>
 
   <p>The app and this website are operated by <strong>WisWiz B.V.</strong>, Woubruggestraat 16-2, 1059 VS Amsterdam, the Netherlands. WisWiz B.V. is the data controller. You can reach us at <a href="mailto:louis@airistoteles.nl">louis@airistoteles.nl</a>.</p>
 
   <h2>Please read this first</h2>
-  <p>Nima is prototype software in active development. During the beta we deliberately record <strong>everything a lesson produces</strong>, so that we can find and fix the tutor's mistakes: your voice, photos of your work, the full transcript, and the tutor's own internal reasoning. We keep those recordings for as long as the beta runs; there is no automatic deletion yet, and the beta's sign-in is not built to production security standards. <strong>Please do not share anything private, sensitive or confidential with Nima</strong> — talk to it about maths. If you want your data removed, email us and we will remove it.</p>
+  <p>Nima records what a lesson produces so the tutor can teach and so we can find and fix its mistakes: your voice, photos of your work, the transcript, and the tutor's own working notes. Talk to Nima about maths. <strong>Do not share anything private, sensitive or confidential with it.</strong></p>
 
   <h2>What we collect</h2>
   <ul>
-    <li><strong>Your phone number.</strong> It is the only thing you type to create an account, and it is the identifier every other record is attached to. We do not ask for your name, email address, age, school or address on any screen.</li>
-    <li><strong>Your first name, if you say it.</strong> The tutor may ask what to call you during a lesson and will store the name you speak, so it can greet you next time.</li>
+    <li><strong>Your phone number.</strong> It is the only thing you type to create an account, and it is the identifier every other record is attached to. The app asks for your phone number and a code. <strong>In the current version the code is not checked against a text message: your phone number is not verified, and anyone who knows the number could open that account.</strong> Do not share the number you use in Nima, and do not tell Nima anything you would not want someone with your number to hear. We will verify numbers by text message in a later version, and we will update this page when we do. We do not ask for your name, email address, age, school or address on any screen.</li>
+    <li><strong>Your first name, if you say it.</strong> The tutor may ask what to call you and stores the name you speak, so it can greet you next time.</li>
     <li><strong>Your voice.</strong> While a lesson is running, the microphone is open and audio is streamed to our server so the tutor can hear you. Audio of the lesson is recorded and stored, together with the text transcription of what you said.</li>
     <li><strong>Photos you take in the app.</strong> When Nima asks to see your work, the camera takes a picture of your notebook, your exercise or your textbook page. Those photos are uploaded and stored, and are read by an AI model so the tutor can check your work.</li>
-    <li><strong>The lesson record.</strong> Everything the lesson generates: the transcript of both sides, what the tutor said and when, what was written on the board, which exercises you worked on, whether your answers were judged right or wrong, and the AI models' own inputs and outputs. It is stored as an append-only archive so we can replay a lesson and understand what went wrong.</li>
-    <li><strong>Motion.</strong> The app reads the phone's motion sensors to notice when you pick the phone up to show your work. This stays on the device as a signal to the tutor; we do not build a movement profile from it.</li>
+    <li><strong>Screen images.</strong> During a lesson the tutor may take an image of the app's own screen (the board and what is written on it) to understand what you see. It never captures other apps.</li>
+    <li><strong>The lesson record.</strong> Everything the lesson generates: the transcript of both sides, what the tutor said and when, what was written on the board, which exercises you worked on, whether your answers were judged right or wrong, and the AI models' own inputs and outputs. Also the type of phone and iOS version, so we can reproduce a problem.</li>
+    <li><strong>Motion.</strong> The app reads the phone's motion sensors to notice when you pick the phone up to show your work. This stays on the device; we do not build a movement profile from it.</li>
   </ul>
   <p>We do not access your photo library, contacts, calendar or location. We do not ask for, or store, any payment details.</p>
 
   <h2>What we do not do</h2>
-  <p>Nima contains <strong>no analytics, advertising or tracking SDKs</strong> — no Google Analytics, no Firebase, no Facebook SDK, no PostHog, no Sentry, no ad networks. The app does not use the advertising identifier (IDFA) and does not ask for tracking permission, because it does not track you across apps or websites. <strong>We do not sell your data, and we do not share it with advertisers or data brokers.</strong></p>
+  <p>Nima contains <strong>no analytics, advertising or tracking SDKs</strong>: no Google Analytics, no Firebase, no Facebook SDK, no PostHog, no Sentry, no ad networks. The app does not use the advertising identifier (IDFA) and does not ask for tracking permission, because it does not track you across apps or websites.</p>
+  <p><strong>We do not sell your data, and we do not share it with advertisers or data brokers.</strong></p>
+
+  <h2>Your permission for AI processing</h2>
+  <p>Before your first lesson the app asks your explicit permission to send your voice, your words and your photos to our server and to the AI services named below. If you do not give it, Nima sends nothing and no lesson starts. You can withdraw it at any time on the Account screen (open Profiel, then Account verwijderen; the withdraw option is on that screen). Nima then asks again before the next lesson. Withdrawing does not delete what was already recorded; use account deletion for that (below).</p>
 
   <h2>Why we process it</h2>
-  <p>To provide the tutoring itself (the tutor cannot teach without hearing you and seeing your work), and to develop and debug the product during the beta. Our legal basis is the performance of the service you asked for, and our legitimate interest in making a prototype work correctly. Where we need your consent — for the microphone and the camera — iOS asks you, and you can withdraw it at any time in the iOS Settings app; without them the tutor cannot run a lesson.</p>
+  <p>To provide the tutoring itself (the tutor cannot teach without hearing you and seeing your work), and to develop and fix the product. Our legal basis is the performance of the service you asked for, your consent for the AI processing above, and our legitimate interest in making the tutor work correctly. Where iOS asks you for the microphone and the camera, you can withdraw that in the iOS Settings app at any time; without them the tutor cannot run a lesson.</p>
 
   <h2>Who processes your data</h2>
-  <p>We use a small number of service providers to run the tutor. They process your data on our instructions, to deliver the tutoring:</p>
+  <p>We use a small number of service providers to run the tutor. They process your data on our instructions:</p>
   <ul>
-    <li><strong>Supabase</strong> — our database, sign-in and file storage, hosted in Europe. It holds your account, the lesson archive, the audio recordings and the photos.</li>
-    <li><strong>Amazon Web Services</strong> — our own tutoring server, running in Amazon's Europe region. Your audio and photos pass through it, and lesson logs are kept on it.</li>
-    <li><strong>OpenAI</strong> — converts your speech to text, and runs the model that decides what the tutor says next. It therefore receives your lesson audio and transcript.</li>
-    <li><strong>Anthropic</strong> — reads the photos of your work and grades it, and helps prepare lesson material. It therefore receives your photos and lesson text.</li>
-    <li><strong>ElevenLabs</strong> — turns the tutor's written lines into the tutor's voice. It receives the text Nima is about to speak; it does not receive your voice.</li>
+    <li><strong>Supabase</strong>: our database, sign-in and file storage, hosted in Europe. It holds your account, the lesson archive, the audio recordings and the photos.</li>
+    <li><strong>Amazon Web Services</strong>: our own tutoring server, running in Amazon's Europe region. Your audio and photos pass through it, and lesson logs are kept on it.</li>
+    <li><strong>OpenAI</strong>: converts your speech to text, runs the model that decides what the tutor says next, and reads the screen images. It receives your lesson audio, transcript and screen images. It also receives an anonymous account code (not your phone number) so OpenAI can apply its safety rules per user.</li>
+    <li><strong>Anthropic</strong>: reads the photos of your work and grades it, and helps prepare lesson material. It receives your photos and lesson text.</li>
+    <li><strong>ElevenLabs</strong>: turns the tutor's written lines into the tutor's voice. It receives the text Nima is about to speak. If we switch speech recognition to ElevenLabs, it also receives your lesson audio; we will update this page before we do.</li>
   </ul>
-  <p>These providers are established in, or process data in, countries outside the European Economic Area, including the United States. Your lesson data may therefore be processed outside the EEA.</p>
+  <p>These providers are established in, or process data in, countries outside the European Economic Area, including the United States. Your lesson data may therefore be processed outside the EEA, under the providers' standard contractual clauses.</p>
 
   <h2>How long we keep it</h2>
-  <p>For the duration of the closed beta, we keep lesson data indefinitely — there is no automatic deletion or expiry in the system today. We will set a retention limit before Nima is released publicly, and we will update this page when we do. You can ask us to delete your data at any time before then.</p>
+  <p>We keep lesson data (audio, photos, screen images, transcripts and the lesson record) for <strong>12 months after your last use of Nima</strong>, then we delete it. Your account, your phone number and your first name stay as long as your account exists. Server logs are kept for at most 90 days. Our AI providers keep what we send them for at most 30 days for abuse monitoring, according to their published terms, and do not train on it.</p>
+  <p>Recordings from the closed beta are covered by the same 12-month limit.</p>
 
   <h2>Your rights, and how to delete your data</h2>
   <p>Under the GDPR you have the right to access your data, to have it corrected, to have it deleted, to object to processing, and to lodge a complaint with a supervisory authority (in the Netherlands, the Autoriteit Persoonsgegevens).</p>
-  <p>The app does not yet have a delete button. To exercise any of these rights, email <a href="mailto:louis@airistoteles.nl">louis@airistoteles.nl</a> from any address, stating the phone number you use in Nima. We will delete your account and everything attached to it — recordings, photos, transcripts and logs — by hand, and confirm when it is done. We aim to do this within 30 days.</p>
+  <p><strong>Delete your account in the app:</strong> open Profiel, then Account verwijderen, and confirm. This removes your account, your phone number, your name, and every lesson, recording, photo, screen image and transcript attached to it, at once, on all your devices. It cannot be undone.</p>
+  <p>Copies on our tutoring server's disk and in our providers' short-term retention disappear within the periods above; they are not searchable by phone number.</p>
+  <p>You can also email <a href="mailto:louis@airistoteles.nl">louis@airistoteles.nl</a> from any address, stating the phone number you use in Nima, for any other request. We answer within 30 days.</p>
 
   <h2>Children</h2>
-  <p>Nima is built for secondary-school students, so we expect many users to be minors. During the closed beta, access is by personal invitation only, and we ask that a parent or guardian agrees to the testing and to this policy before a child under 16 uses the app. If you are a parent and want your child's data removed, email us and we will remove it.</p>
+  <p>Nima is built for secondary-school students, so we expect many users to be minors. If you are under 16, ask a parent or guardian to read this policy with you before you give the AI permission above. If you are a parent and want your child's data removed, delete the account in the app or email us.</p>
 
   <h2>Security</h2>
-  <p>Lesson data is stored in private buckets and database tables that are not publicly listable, and all traffic between the app and our servers is encrypted in transit. Be aware, though, that beta sign-in is deliberately simple and is <strong>not yet hardened</strong>: it identifies you by your phone number, and it is not a security boundary you should rely on. Treat anything you tell Nima during the beta as not confidential. We will replace it with proper verification before public release.</p>
+  <p>Lesson data is stored in private buckets and database tables that are not publicly listable, and all traffic between the app and our servers is encrypted in transit. Sign-in is by phone number and a code, and <strong>in the current version the code is not verified by text message</strong>: sign-in is not a security boundary you should rely on. Anyone who knows your phone number could open your account. Treat what you tell Nima as not confidential until we ship text-message verification, and we will update this page when we do.</p>
 
   <h2>Changes</h2>
   <p>When we change how Nima handles data, we will change this page and move the date at the top. The current version is always at <a href="https://airistoteles.nl/privacy">airistoteles.nl/privacy</a>.</p>
